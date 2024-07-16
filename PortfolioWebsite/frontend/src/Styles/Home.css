@@ -1,0 +1,100 @@
+.homepage{
+    width:100%;
+    height:1080px; 
+    background-image: url("../Images/homepage.jpg" );
+    background-size: cover ;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    display: flex;
+    justify-content: center;
+
+}
+.greeting{
+    margin-top: 310px;
+    margin-left: auto;
+    margin-right: auto;
+    
+}
+.firstLine{
+    display:flex;
+    justify-content:center;
+}
+.hello{
+    color: white;
+    font-size:50px;
+}
+.name{
+    margin-left:10px;
+    color: rgb(190, 228, 23);
+    font-size:50px;
+}
+.secondLine{
+    display: flex;
+    justify-content:center;
+}
+.btnLearnMore{
+    color:white;
+    font-size:25px;
+    padding:10px;
+    background-color:transparent;
+    border:3px solid white;
+    transition:.25s;
+}
+
+.btnLearnMorehover:hover .btnLearnMore{
+    color:black;
+    background-color:rgb(173,216,230); /*rgb(173,216,230) #DEB887*/
+    border:3px solid rgb(173,216,230) ;
+}
+
+.btnLearnMorediv{
+    margin-top:10px;
+    display: flex;
+    justify-content: center;
+}
+
+.arrow{
+    display: inline-block;
+    position: relative;
+    width:15px;
+    height:2px;
+    border-radius:4px;
+    background-color:white;
+    bottom:6px;
+    transition:.25s;
+}
+.arrow::before{
+    content:"";
+    display:inline-block;
+    width:10px;
+    height:2px;
+    background-color:white;
+    transform: rotate(45deg) ;
+    position:absolute;
+    right: -1px;
+    bottom:3px;
+    border-radius:4px;
+    transition:.25s;
+}
+.arrow::after{
+    content:"";
+    display:inline-block;
+    width:10px;
+    height:2px;
+    background-color:white;
+    transform: rotate(-45deg) ;
+    position:absolute;
+    right: -1px;
+    bottom:-3px;
+    border-radius:4px;
+    transition:.25s;
+}
+.btnLearnMorehover:hover .arrow{
+    background-color: black;
+    transform: rotate(90deg);
+    -webkit-transform: rotate(90deg);
+}
+
+.btnLearnMorehover:hover .arrow::after,.btnLearnMorehover:hover .arrow::before{
+    background-color:black;
+}

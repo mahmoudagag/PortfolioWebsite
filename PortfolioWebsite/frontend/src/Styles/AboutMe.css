@@ -1,0 +1,234 @@
+.About{
+    /*height:auto;
+    overflow:auto;*/
+    height: 100%;
+    max-width: 100%;
+    background-color: white;
+    margin-bottom: 100px;
+    border: 1px solid white;
+    min-height:800px;
+}
+.aboutTitle{
+    margin-top:70px;
+    max-width: 100%;
+    animation: about 2s;
+}
+.aboutTitleName{
+    text-align: center;
+    margin-bottom:10px;
+    font-size: 50px;
+    font-family: 'Quicksand',sans-serif;
+    color:  #343a40;
+}
+.aboutunderlineTitle{
+    margin-left: auto;
+    margin-right: auto;
+    border-top: 5px solid #343a40;
+    width: 120px;
+}
+@keyframes about {
+    from{
+        max-width: 0%;
+        opacity: 0;
+    }
+    to{
+        max-width: 100%;
+        opacity: 1;
+    }
+}
+
+.aboutdiv{
+    margin-top:80px;
+    max-width: 1400px;
+    height: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    display:flex;
+}
+
+.aboutsection{
+    width: 38%;
+    margin-left:10%;
+    margin-right:7%;
+    animation: aboutsection 2s;
+}
+@keyframes aboutsection {
+    from{
+        opacity:0;
+        transform: translateX(-600px);
+    }
+    to{
+        transform: translateX(0px);
+        opacity:1;
+    }
+}
+.opac{
+    opacity: 0;
+}
+.aboutborder{
+    height:100%;
+    width:0px;
+    border: 1px solid lightgray;
+    animation: aboutborder 1s;
+}
+@keyframes aboutborder {
+    from{
+        transform: translateY(600px);
+        opacity:0;
+    }
+    to{
+        transform: translateY(0px);
+        opacity:1;
+    }
+}
+.skillsection{
+    width: 50%;
+    margin-left:7%;
+    margin-right:10px;
+    animation: skillsection 2s;
+}
+@keyframes skillsection {
+    from{
+        opacity:0;
+        transform: translateX(600px);
+    }
+    to{
+        transform: translateX(0px);
+        opacity:1;
+    }
+}
+.aboutheader{
+    display: flex;
+    justify-content: center;
+    font-size:40px;
+    font-family: 'Quicksand',sans-serif;
+}
+
+.headersubtitle{
+    display: flex;
+    
+    justify-content: center;
+}
+.leftedge{
+    margin-right:5px;
+    margin-top: auto;
+    margin-bottom: auto;
+    border: 2px solid black;
+    width:20px;
+    height:0px;
+    border-radius:10px;
+}
+.subtitle{
+    font-size:25px;
+    color:red;
+    font-family: 'Quicksand',sans-serif;
+}
+.rightedge{
+    margin-left:5px;
+    margin-top: auto;
+    margin-bottom: auto;
+    border: 2px solid black;
+    width:20px;
+    height:0px;
+    border-radius:10px;
+}
+
+.aboutmetext{
+    font-size:20px;
+    font-family: 'Quicksand',sans-serif;
+    text-align: center;
+    line-height:30px;
+}
+.resumebtn{
+    display: flex;
+    justify-content: center;
+    position: relative;
+    font-size:25px;
+    color:black;
+    background-color: #DEB887;
+    padding:10px;
+    max-width: 300px;
+    margin-left:auto;
+    margin-right:auto;
+    cursor: pointer;
+    transition:.3s ;
+}
+.resumebtn:hover{
+    transform: scale(1.1);
+}
+/*.resumebtn:hover{
+    background-color:#DEB887;
+    border: 3px solid#DEB887;
+    color:black;
+    transition: color,background-color,border .25s;
+}*/
+/*.resumebtn:hover::before,.resumebtn:focus::before{ transform:scaleX(1)}
+.resumebtn::before{
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: -1;
+    background-color: #DEB887;
+    transform:scaleX(0) ;
+    transform-origin:left ;
+    transition: transform 300ms ease-in-out;
+}*/
+
+
+.skillbox{
+    width:100%;
+    display:flex;
+    border:1px solid black;
+    font-size:18px;
+    margin-top:20px;
+    transition: 0s; 
+}
+.skillbox:hover{
+    transform: scale(1.05);
+}
+.skillname{
+    background-color:#009494;
+    color:white;
+    display:flex;
+    justify-content: center;
+    border-right: 1px solid black;
+    padding-top:8px;
+    padding-bottom:8px;
+    width: 17%;
+    min-width: 80px;
+}
+.skillpercentdiv{
+    width:100%;
+    display:flex;
+    position: relative;
+    min-width: 200px;
+}
+.filler{
+    /* total is 500*/
+    
+    background-color: #00ffff;
+}
+.skill1percent{ width:80%;animation:skill1percent 2s; } .skill2percent{  width:70%;animation:skill2percent 2s; } .skill3percent{ width: 70%;animation:skill3percent 2s; } 
+.skill4percent{ width: 30%;animation:skill4percent 2s; } .skill5percent{ width:60%;animation:skill5percent 2s; } .skill6percent{ width: 45%; animation:skill6percent 2s;} 
+.skill7percent{ width: 25%; animation:skill7percent 2s; } .skill8percent{ width: 30%; animation:skill8percent 2s;}
+@keyframes skill1percent {from{width: 0px; }to{width:80%;}}
+@keyframes skill2percent {from{width: 0px; }to{width:70%;}}
+@keyframes skill3percent {from{width: 0px; }to{width: 70%;}}
+@keyframes skill4percent {from{width: 0px; }to{width:30%;}}
+@keyframes skill5percent {from{width: 0px; }to{width:60%;}}
+@keyframes skill6percent {from{width: 0px; }to{width:45%;}}
+@keyframes skill7percent {from{width: 0px; }to{width:25%;}}
+@keyframes skill8percent {from{width: 0px; }to{width:30%;}}
+
+.skillpercent{
+    font-size:20px;
+    position: absolute;
+    right:0;
+    top:6px;
+    margin-top: auto;
+    margin-bottom: auto;
+
+}
