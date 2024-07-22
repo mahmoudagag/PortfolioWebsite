@@ -43,7 +43,7 @@ services:
 
   measly:
     build:
-      context: ./Measly        # Path to the Dockerfile for the backend
+      context: ./Mealsy        # Path to the Dockerfile for the backend
       dockerfile: Dockerfile    # Dockerfile name if not 'Dockerfile'
       args:
         - REACT_APP_BACKEND_URL=http://localhost:7000
