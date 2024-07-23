@@ -101,6 +101,21 @@
 .Stockpopupbackgroundimage3{
     background-image: url('../Images/Stockprojectimg3.png')
 }  
+.Stockpopupbackgroundimage4{
+    background-image: url('../Images/Stockprojectimg4.png')
+}  
+.Stockpopupbackgroundimage5{
+    background-image: url('../Images/Stockprojectimg5.png')
+}  
+.Stockpopupbackgroundimage6{
+    background-image: url('../Images/Stockprojectimg6.png')
+}  
+.Stockpopupbackgroundimage7{
+    background-image: url('../Images/Stockprojectimg7.png')
+}  
+.Stockpopupbackgroundimage8{
+    background-image: url('../Images/Stockprojectimg8.png')
+}  
 .popupbottom{
     height: 30%;
     background-color: white;
@@ -169,4 +184,42 @@
 }*/
 .sudokuProjectImg2{
     background-image: url('../Images/sudokuProjectImg3.png');
+}
+
+.whatsthewordprojectimg1{
+    background-image: url('../Images/whatsthewordimg1.png')
+}
+.whatsthewordprojectimg2{
+    background-image: url('../Images/whatsthewordimg2.png')
+}
+.whatsthewordprojectimg3{
+    background-image: url('../Images/whatsthewordimg3.png')
+}
+.whatsthewordprojectimg4{
+    background-image: url('../Images/whatsthewordimg4.png')
+}
+.whatsthewordprojectimg5{
+    background-image: url('../Images/whatsthewordimg5.png')
+}
+.whatsthewordprojectimg6{
+    background-image: url('../Images/whatsthewordimg6.png')
+}
+
+.mealsyprojectimg1{
+    background-image: url('../Images/mealsyimg1.png')
+}
+.mealsyprojectimg2{
+    background-image: url('../Images/mealsyimg2.png')
+}
+.mealsyprojectimg3{
+    background-image: url('../Images/mealsyimg3.png')
+}
+.mealsyprojectimg4{
+    background-image: url('../Images/mealsyimg4.png')
+}
+.mealsyprojectimg5{
+    background-image: url('../Images/mealsyimg5.png')
+}
+.mealsyprojectimg6{
+    background-image: url('../Images/mealsyimg6.png')
 }

@@ -167,10 +167,17 @@
 }
 
 .StockSimulatorBackground{
-    background-image: url("../Images/stockSimulatorPhoto.jpg");
+    background-image: url("../Images/stockSimulatorPhoto.png");
 }
+.WhatsThewordBackground{
+    background-image: url("../Images/WhatsTheWordPhoto.png");
+}
+
 .SearchingProjectBackground{
     background-image: url("../Images/SearchingPhoto.png");
+}
+.MeaslyBackground{
+    background-image: url("../Images/MealsyPhoto.png");
 }
 .SortingProjectBackground{
     background-image: url("../Images/SortingProject.png");

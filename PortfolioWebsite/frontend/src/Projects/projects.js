@@ -21,19 +21,33 @@ class Modal{
 }
 const PortfolioWebsiteUrl = process.env.REACT_APP_BACKEND_URL || "http://localhost"
 const PortfolioWebsitePort = process.env.REACT_APP_PORTFOLIOWEBSITE_PORT || "8080"
+const StockPaperTradingPort = process.env.REACT_APP_STOCKPAPERTRADINGAPP_PORT || "8080"
 const WhatsTheWordPort = process.env.REACT_APP_WHATSTHEWORDAPP_PORT || "8080"
+const MealsyPort = process.env.REACT_APP_MEALSYAPP_PORT || "8080"
 console.log(process.env)
 
 const stockModal = new Modal("Stock Simulator Web App",
-    "React, Django, JavaScript, Python, HTML, CSS, Chartjs",
-    "A web app that allows users to simulate buying and selling stocks.Users register and log into their accounts.They can search stocks up and get live stock prices with graphs of the stock at different time intervals. Users can monitor they history and they networth over time.",
+    "React, Golang, Mongodb",
+    "A web app that allows users to simulate buying and selling stocks. Users register and log into their accounts. They can search stocks up and get live stock prices with graphs of the stock at different time intervals. Users can monitor they history and they networth over time.",
     "https://github.com/mahmoudagag/StockSimulator",
-    `${PortfolioWebsiteUrl}:${WhatsTheWordPort}`, // add later 
+    `${PortfolioWebsiteUrl}:${StockPaperTradingPort}`, // add later 
     "stockappdetails",
     "popupstockbackground",
     "Stockpopupbackgroundimage",
-    3
+    8
 )
+
+const whatsTheWordModal = new Modal("What's the Word Game",
+    "React, node, websocket",
+    "An interactive web-based game designed for playing with friends. Players are challenged with creating words using two given letters. This app leverages websockets to establish groups and event listeners.",
+    "https://github.com/mahmoudagag/WhatsTheWordApp",
+    `${PortfolioWebsiteUrl}:${WhatsTheWordPort}`, // add later 
+    "whatsthewordappdetails",
+    "popupwhatsthewordbackground",
+    "whatsthewordprojectimg",
+    6
+)
+
 const visulaizedSearchingAlgorithmModal = new Modal("Visulaized Searching Algorithm",
     "JavaScript, HTML, CSS",
     "This software allows users to visualize different searching algorithms. Users can choose one of the five algorithms. Then place the start and end point anywhere on the graph. Add blocks to increase complexity or pick from one of the premade mazes. Finally click visualize to watch the magic happen.",
@@ -43,6 +57,17 @@ const visulaizedSearchingAlgorithmModal = new Modal("Visulaized Searching Algori
     "popupsearchingbackground",
     "searchprojectimg",
     4
+)
+
+const mealsyModal = new Modal("Mealsy",
+    "React, node, Mongodb",
+    "Introducing a versatile web application designed for meal planning. Easily schedule meals on a calendar, complete with ingredients and recipes. Stay organized with automatic tracking of weekly ingredient needs. Need culinary inspiration? Our app integrates seamlessly with third-party APIs to suggest recipes based on your preferences. Plus, the APIs to provide nutritional insights, helping you monitor your macros effortlessly",
+    "https://github.com/mahmoudagag/Measly",
+    `${PortfolioWebsiteUrl}:${MealsyPort}`, // add later 
+    "mealsyappdetails",
+    "popupmeaslybackground",
+    "mealsyprojectimg",
+    6
 )
 
 const visulaizedSortingAlgorithmModal = new Modal("Visulaized Sorting Algorithm",
@@ -78,8 +103,10 @@ const sudokuSolverModal = new Modal("Sudoku Solver",
 
 // ASL learner, whats the word game, measly
 export const projects = [
-    new projectInformation("Stock Simulator Web App", "ReactJS, Django", "StockSimulatorBackground", stockModal),
+    new projectInformation("Stock Simulator Web App", "React, Golang, Mongodb", "StockSimulatorBackground", stockModal),
+    new projectInformation("What's the Word Game", "React, Node, SocketIO", "WhatsThewordBackground", whatsTheWordModal),
     new projectInformation("Visual Searching Algorithms", "JavaScript", "SearchingProjectBackground", visulaizedSearchingAlgorithmModal),
+    new projectInformation("Mealsy", "React, Node, Mongodb ", "MeaslyBackground", mealsyModal),
     new projectInformation("Visual Sorting Algorithms", "JavaScript", "SortingProjectBackground", visulaizedSortingAlgorithmModal), 
     new projectInformation("Tic Tac Toe AI", "Python", "TicTacToeBackground", ticTacToeModal), 
     new projectInformation("Sudoku AI", "Python", "SudokuProjectBackground", sudokuSolverModal), 
