@@ -25,7 +25,7 @@ RUN npm run build
 FROM node:14-alpine
 
 # Set the working directory inside the container
-WORKDIR /usr/src/app
+WORKDIR /app
 
 # ENV
 ARG MONGO_URL
@@ -43,7 +43,7 @@ COPY backend/package*.json ./
 # Install dependencies
 RUN npm install --production
 
-COPY --from=build /app  .
+COPY --from=build /app/build  /app/build
 
 # Copy the rest of the application code
 COPY /backend .

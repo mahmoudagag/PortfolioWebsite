@@ -49,18 +49,8 @@ COPY /backend .
 # Build the Go app
 RUN CGO_ENABLED=0 GOOS=linux go build -o /build/PortfolioWebsite
 
-# Use scratch (empty) image for final stage
-FROM scratch
-
-# Set working directory inside the container
-WORKDIR /app
-
-# Copy the built executable from builder stage
-COPY --from=build_backend /build/PortfolioWebsite /app/PortfolioWebsite
-COPY --from=build_backend /build/Visual-Sorting-Algorithms /app/Visual-Sorting-Algorithms
-COPY --from=build_backend /build/Visualize-Search-Algorithms /app/Visualize-Search-Algorithms
 COPY --from=build_frontend /app  .
 
 # Specify the command to run the executable
-CMD ["/app/PortfolioWebsite"]
+CMD ["/build/PortfolioWebsite"]
 

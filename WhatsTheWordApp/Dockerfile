@@ -12,8 +12,11 @@ COPY frontend/package*.json ./
 RUN npm install --production
 
 # Set environment variable
-ARG REACT_APP_BACKEND_URL
-ENV REACT_APP_BACKEND_URL=$REACT_APP_BACKEND_URL
+ARG REACT_APP_BASE_BACKEND_URL
+ENV REACT_APP_BASE_BACKEND_URL=$REACT_APP_BASE_BACKEND_URL
+
+ARG REACT_APP_WEBSOCKET_PATH
+ENV REACT_APP_WEBSOCKET_PATH=$REACT_APP_WEBSOCKET_PATH
 
 # Copy the rest of the application code
 COPY /frontend .
@@ -25,7 +28,7 @@ RUN npm run build
 FROM node:14-alpine
 
 # Set the working directory inside the container
-WORKDIR /usr/src/app
+WORKDIR /app
 
 # Copy package.json and package-lock.json (if available)
 COPY backend/package*.json ./
@@ -33,7 +36,7 @@ COPY backend/package*.json ./
 # Install dependencies
 RUN npm install --production
 
-COPY --from=build /app  .
+COPY --from=build /app/build  /app/build
 
 # Copy the rest of the application code
 COPY /backend .

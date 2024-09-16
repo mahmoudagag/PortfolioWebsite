@@ -8,6 +8,7 @@ function App() {
   return (
       <Routes>
         <Route path='/' element = {<Dashboard/>} />
+        <Route path='/stockpapertrading/' element = {<Dashboard/>} />
         <Route path='/login' element={<LoginForm/>}/>
         <Route path='/register' element={<Register/>}/>
       </Routes>

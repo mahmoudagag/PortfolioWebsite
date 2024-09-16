@@ -45,7 +45,7 @@ ARG JWT_ENCRIPTION_KEY
 ENV JWT_ENCRIPTION_KEY=$JWT_ENCRIPTION_KEY
 
 # Copy the built executable from builder stage
-COPY --from=build_frontend /app  .
+COPY --from=build_frontend /app/build /build/build
 
 # Specify the command to run the executable
 CMD ["/build/StockPaperTrading"]

@@ -24,7 +24,7 @@ const PortfolioWebsitePort = process.env.REACT_APP_PORTFOLIOWEBSITE_PORT || "808
 const StockPaperTradingPort = process.env.REACT_APP_STOCKPAPERTRADINGAPP_PORT || "8080"
 const WhatsTheWordPort = process.env.REACT_APP_WHATSTHEWORDAPP_PORT || "8080"
 const MealsyPort = process.env.REACT_APP_MEALSYAPP_PORT || "8080"
-console.log(process.env)
+// console.log(process.env)
 
 const stockModal = new Modal("Stock Simulator Web App",
     "React, Golang, Mongodb",

@@ -7,8 +7,11 @@ import Game from './components/game'
 import GameOver from './components/gameover'
 import io from 'socket.io-client'
 
-const url = process.env.REACT_APP_BACKEND_URL || "http://localhost:5000/"
-const socket = io.connect(url)
+const url = process.env.REACT_APP_BASE_BACKEND_URL || "http://localhost:5000/"
+const path = process.env.REACT_APP_WEBSOCKET_PATH
+const socket = io.connect(url,{
+  'path': path
+})
 
 const pages = {home : 0, lobby : 1, game : 2, gameOver : 3}
 
