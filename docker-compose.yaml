@@ -4,8 +4,8 @@ services:
       context: ./PortfolioWebsite        # Path to the Dockerfile for the backend
       dockerfile: Dockerfile    # Dockerfile name if not 'Dockerfile'
       args:
-        - REACT_APP_BACKEND_URL=http://localhost
-        # - REACT_APP_BACKEND_URL=54.162.204.24
+        # - REACT_APP_BACKEND_URL=http://localhost
+        - REACT_APP_BACKEND_URL=http://mahmoudagag.com
         - REACT_APP_PORTFOLIOWEBSITE_PORT=/
         - REACT_APP_WHATSTHEWORDAPP_PORT=/whatstheword
         - REACT_APP_STOCKPAPERTRADINGAPP_PORT=/stockpapertrading
@@ -21,9 +21,9 @@ services:
       context: ./WhatsTheWordApp        # Path to the Dockerfile for the backend
       dockerfile: Dockerfile    # Dockerfile name if not 'Dockerfile'
       args:
-        - REACT_APP_BASE_BACKEND_URL=http://localhost/
+        # - REACT_APP_BASE_BACKEND_URL=http://localhost/
+        - REACT_APP_BASE_BACKEND_URL=http://mahmoudagag.com/
         - REACT_APP_WEBSOCKET_PATH=/whatstheword/socket.io/
-        # - REACT_APP_BACKEND_URL=54.162.204.24:5000/
 
     ports:
       - "5000:5000"             # Expose backend's port 3000
@@ -36,8 +36,8 @@ services:
       context: ./StockPaperTradingApp       # Path to the Dockerfile for the backend
       dockerfile: Dockerfile    # Dockerfile name if not 'Dockerfile'
       args:
-        - REACT_APP_BACKEND_URL=http://localhost/stockpapertrading
-        # - REACT_APP_BACKEND_URL=54.162.204.24:8000
+        # - REACT_APP_BACKEND_URL=http://localhost/stockpapertrading
+        - REACT_APP_BACKEND_URL=http://mahmoudagag.com/stockpapertrading
         - MONGODB_URI=mongodb+srv://agagmahmoud:xGiowF7dffBIZmPa@cluster0.xrrtozz.mongodb.net/?retryWrites=true&w=majority
         - API_KEY=iQmewMFHJY7lz3iha1WrBazQaikCkTZ45iGInxOW
         - JWT_ENCRIPTION_KEY=FkdcFb5Dsa
@@ -52,8 +52,8 @@ services:
       context: ./Mealsy        # Path to the Dockerfile for the backend
       dockerfile: Dockerfile    # Dockerfile name if not 'Dockerfile'
       args:
-        - REACT_APP_BACKEND_URL=http://localhost/mealsy
-        # - REACT_APP_BACKEND_URL=54.162.204.24:7000
+        # - REACT_APP_BACKEND_URL=http://localhost/mealsy
+        - REACT_APP_BACKEND_URL=http://mahmoudagag.com/mealsy
         - MONGO_URL=mongodb+srv://agagmahmoud:xGiowF7dffBIZmPa@cluster0.xrrtozz.mongodb.net/?retryWrites=true&w=majority
         - JWT_SECRET=BC5kVNZjOF
         - JWT_LIFETIME=1d
