@@ -1,3 +1,4 @@
+# to run docker-compose -f docker-compose.prod.yml up -d
 services:
   portfoliowebsite:
     build:
@@ -5,16 +6,17 @@ services:
       dockerfile: Dockerfile    # Dockerfile name if not 'Dockerfile'
       args:
         # - REACT_APP_BACKEND_URL=http://localhost
+        - REACT_APP_BACKEND_URL=http://localhost
         - REACT_APP_BACKEND_URL=http://mahmoudagag.com
         - REACT_APP_PORTFOLIOWEBSITE_PORT=/
         - REACT_APP_WHATSTHEWORDAPP_PORT=/whatstheword
         - REACT_APP_STOCKPAPERTRADINGAPP_PORT=/stockpapertrading
         - REACT_APP_MEALSYAPP_PORT=/mealsy
     ports:
-      - "3001:3001"             # Expose backend's port 3000
+      - "3000:3000"             # Expose backend's port 3000
     restart: always             # Restart policy
     environment:
-      - PORT=3001
+      - PORT=3000
 
   whatstheword:
     build:
@@ -71,10 +73,10 @@ services:
     ports:
       - "80:80"
     environment:
-      DOMAIN_NAME: localhost
+      DOMAIN_NAME: mahmoudagag.com
     depends_on:
       - whatstheword
       - portfoliowebsite
-      # - stockpapertrading
-      # - mealsy
+      - stockpapertrading
+      - mealsy
 ### ASL/ 
