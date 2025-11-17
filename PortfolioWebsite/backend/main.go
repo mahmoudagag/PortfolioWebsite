@@ -10,7 +10,7 @@ import (
 func main() {
 	router := gin.Default()
 
-	router.Use(static.Serve("/", static.LocalFile("./build", true)))
+	router.Use(static.Serve("/", static.LocalFile("./frontend", true)))
 	router.Static("/VisualizeSearchingAlogrithms", "./Visualize-Search-Algorithms")
 	router.Static("/VisualizeSortingAlogrithms", "./Visual-Sorting-Algorithms")
 

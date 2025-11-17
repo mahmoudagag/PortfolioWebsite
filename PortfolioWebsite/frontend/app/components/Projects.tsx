@@ -2,7 +2,6 @@
 
 import React from "react";
 import ProjectCard from "./ProjectCard";
-import { describe } from "node:test";
 
 export default function Projects() {
   return (
