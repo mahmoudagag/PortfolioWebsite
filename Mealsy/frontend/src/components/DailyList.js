@@ -3,7 +3,7 @@ import GlobalContext from "../context/GlobalContext";
 import axios from "axios";
 
 export default function DailyList() {
-    const URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:5000"
+    const URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:5001"
 
     const { token, setShowDailyModal } = useContext(GlobalContext);
     const [ dailys,setDailys ] = useState([])

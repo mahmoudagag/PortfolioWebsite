@@ -12,7 +12,7 @@ const labelsClasses = [
 ];
 
 export default function EventModal() {
-    const URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:5000"
+    const URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:5001"
 
     const {
         token,

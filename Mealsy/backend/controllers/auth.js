@@ -1,39 +1,52 @@
-const User = require('../models/User')
-const {StatusCodes} = require('http-status-codes')
-const {BadRequestError, UnauthenticatedError, ConflictRequestError} = require('../errors/index')
-const jwt = require('jsonwebtoken')
-//hashing password
-const bcrypt = require('bcryptjs')
+import {StatusCodes} from 'http-status-codes'
+import {BadRequestError, UnauthenticatedError, ConflictRequestError} from '../errors/index.js'
+import { hashPassword, createJWT, comparePassword } from "../utils/jwt.js";
+import prisma from '../db/connect.js'
 
 const register = async (req,res) => {
-    exists = await User.find({email:req.body.email})
-    if (exists.length != 0){
+    const { firstname, lastname, email, password } = req.body;
+
+    const userFound = await prisma.user.findUnique({
+      where: { email },
+    });
+
+    if (userFound !== null){
         throw new ConflictRequestError('Email in use')
-        // res.status(StatusCodes.CONFLICT).json({err:"Email in Use"})
     }
-    const user = await User.create({...req.body})
-    const token = user.createJWT()
+    const hashedPassword = await hashPassword(password);
+
+    const user = await prisma.user.create({
+        data: {
+        firstname,
+        lastname,
+        email,
+        password: hashedPassword,
+        },
+    });
+    const token = createJWT(user)
     res.status(StatusCodes.CREATED).json({user:{firstname:user.firstname,lastname:user.lastname,email:user.email}, token})
     
 }
 
 const login = async (req,res) => {
     const {email,password} = req.body
+
     if (!email || !password ){
         throw new BadRequestError('Please provide email and password')
-        // res,status
     }
-    const user = await User.findOne({email})
-    
+
+    const user = await prisma.user.findUnique({
+      where: { email },
+    });
+
     if( !user ){
         throw new UnauthenticatedError('Invalid Credentioanls')
     }
-    const isPasswordCorrect = await user.comparePassword(password)
+    const isPasswordCorrect = await comparePassword(password, user.password)
     if(!isPasswordCorrect){
         throw new UnauthenticatedError('Invalid Credentioanls')
     }
-    const token = user.createJWT()
+    const token = createJWT(user)
     res.status(StatusCodes.OK).json({user:{firstname:user.firstname,lastname:user.lastname,email:user.email}, token})
 }
-
-module.exports = {register , login}
+export {register , login}

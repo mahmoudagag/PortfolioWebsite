@@ -1,7 +1,7 @@
 
 
 # Stage 1: Build the React application
-FROM node:14-alpine as build
+FROM node:20-alpine as build
 
 WORKDIR /app
 
@@ -22,20 +22,16 @@ COPY /frontend .
 RUN npm run build
 
 # Stage 2: Run backend
-FROM node:14-alpine
+FROM node:20-alpine
 
 # Set the working directory inside the container
 WORKDIR /app
 
 # ENV
-ARG MONGO_URL
-ENV MONGO_URL=$MONGO_URL
-ARG JWT_SECRET
-ENV JWT_SECRET=$JWT_SECRET
-ARG JWT_LIFETIME
-ENV JWT_LIFETIME=$JWT_LIFETIME
-ARG API_KEY
-ENV API_KEY=$API_KEY
+# ENV MONGO_URL=""
+# ENV JWT_SECRET=""
+# ENV JWT_LIFETIME=""
+# ENV API_KEY=""
 
 # Copy package.json and package-lock.json (if available)
 COPY backend/package*.json ./
@@ -48,8 +44,10 @@ COPY --from=build /app/build  /app/build
 # Copy the rest of the application code
 COPY /backend .
 
+RUN npx prisma migrate deploy
+
 # Expose the port that the app runs on
-EXPOSE 3000
+EXPOSE 7002
 
 # Command to run the application
 CMD ["node", "app.js"]

@@ -5,7 +5,7 @@ import axios from 'axios';
 import GlobalContext from "../context/GlobalContext";
 
 export default function LogIn() {
-    const URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:5000"
+    const URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:5001"
     const { setToken,setUser } = useContext(GlobalContext)
     const navigate = useNavigate();
 

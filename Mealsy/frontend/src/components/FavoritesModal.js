@@ -4,7 +4,7 @@ import Select from "react-select";
 import axios from 'axios'
 
 export default function FavoritesModal() {
-    const URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:5000"
+    const URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:5001"
 
     const { token, setShowFavoritesModal, daySelected, } = useContext(GlobalContext);
 

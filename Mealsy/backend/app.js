@@ -1,28 +1,29 @@
-require('dotenv').config()
-require('express-async-errors');
+import dotenv from "dotenv";
+dotenv.config();
+import 'express-async-errors';
 
+import { fileURLToPath } from "url";
 //extra securit packages
-const helmet = require('helmet')
-const cors = require('cors')
-const xss = require('xss-clean')
-const rateLimiter = require('express-rate-limit')
-const path = require('path')
+import helmet from 'helmet'
+import cors from 'cors'
+import xss from 'xss-clean'
+import rateLimiter from 'express-rate-limit'
+import path from 'path'
 
-const express = require('express')
-const authenticateUser = require('./middleware/authentication')
+import express from 'express'
+import authenticateUser from './middleware/authentication.js'
 const app = express()
 
 //db
-const connectDB = require('./db/connect');
-
+ 
 //routers
-const authRouter = require('./routes/auth')
-const infoRouter = require('./routes/information')
-const recipeRounter = require('./routes/recipe')
-const favoriteRouter = require('./routes/favorite')
+import authRouter from './routes/auth.js'
+import infoRouter from "./routes/information.js";
+import recipeRounter from './routes/recipe.js'
+import favoriteRouter from './routes/favorite.js'
 // error handler
-const notFoundMiddleware = require('./middleware/not-found');
-const errorHandlerMiddleware = require('./middleware/error-handler');
+import notFoundMiddleware from './middleware/not-found.js';
+import errorHandlerMiddleware from './middleware/error-handler.js';
 
 app.use(express.json())
 // app.set('trust proxy',1)
@@ -34,7 +35,9 @@ app.use(rateLimiter({
 // app.use(xss())
 app.use(cors())
 
-app.use(express.static(path.join(__dirname,'build')))
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+app.use(express.static(path.join(__dirname, "build")));
 
 app.get('/',(req,res) =>{
     res.sendFile(path.join(__dirname,'build','index.html'))
@@ -49,10 +52,9 @@ app.use('/api/favorite',authenticateUser,favoriteRouter)
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
 
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 7001;
 const start = async () => {
   try {
-    await connectDB(process.env.MONGO_URL);
     app.listen(port, () =>
       console.log(`Server is listening on port ${port}...`)
     );

@@ -1,44 +1,64 @@
-const Favorite = require('../models/Favorites')
-const {StatusCodes } = require('http-status-codes')
-const {BadRequestError,NotFoundError} = require('../errors/index')
+import prisma from "../db/connect.js";
+import {StatusCodes } from 'http-status-codes'
+import {NotFoundError} from '../errors/index.js'
 
-const getFavorites = async (req,res) => {
-    const fav = await Favorite.find({createdBy:req.user._id}).sort('createdAt')
-    console.log(fav)
-    res.status(StatusCodes.OK).json(fav)
-}
+export const getFavorites = async (req, res) => {
+  const userId = req.user.id;
 
-const createFavorite = async (req,res) => {
-    console.log(req.body)
-    req.body.createdBy = req.user._id
-    console.log(req.body)
-    const fav = await Favorite.create(req.body)
-    res.status(StatusCodes.CREATED).json({fav})
-}
+  const favs = await prisma.favorite.findMany({
+    where: { createdById: userId },
+    orderBy: { createdAt: "asc" },
+  });
 
-const deleteFavorite = async (req,res) => {
-    const {
-        user:{_id:userId},
-        params:{id:favoriteId},
-    } = req
-    const info = await Favorite.findByIdAndRemove({_id:favoriteId,createdBy:userId})
-    if(!info){
-        throw new NotFoundError(`No info with id ${favoriteId}`)
-    }
-    res.status(StatusCodes.OK).send()
-}
+  res.status(StatusCodes.OK).json(favs);
+};
 
-const getFavorite = async (req,res) => {
-    const {
-        user:{_id:userId},
-        params:{id:favoriteId},
-    } = req
+export const createFavorite = async (req, res) => {
+  const { name, ingredients, instructions } = req.body;
+  const createdById = req.user.id;
 
-    const favorite = await Favorite.findOne({_id:favoriteId,createdBy:userId})
-    
-    if(!favorite){
-        throw new NotFoundError(`No job with id ${favoriteId}`)
-    }
-    res.status(StatusCodes.OK).json({favorite})
-}
-module.exports = {getFavorites, createFavorite, deleteFavorite,getFavorite}
+  const fav = await prisma.favorite.create({
+    data: {
+      name,
+      ingredients, 
+      instructions,
+      createdById,
+    },
+  });
+
+  res.status(StatusCodes.CREATED).json({ fav });
+};
+
+export const deleteFavorite = async (req, res) => {
+  const userId = req.user.id;
+  const favoriteId = Number(req.params.id); 
+
+  const fav = await prisma.favorite.findFirst({
+    where: { id: favoriteId, createdById: userId },
+  });
+
+  if (!fav) {
+    throw new NotFoundError(`No favorite with id ${favoriteId}`);
+  }
+
+  await prisma.favorite.delete({
+    where: { id: favoriteId },
+  });
+
+  res.status(StatusCodes.OK).send();
+};
+
+export const getFavorite = async (req, res) => {
+  const userId = req.user.id;
+  const favoriteId = Number(req.params.id);
+
+  const fav = await prisma.favorite.findFirst({
+    where: { id: favoriteId, createdById: userId },
+  });
+
+  if (!fav) {
+    throw new NotFoundError(`No favorite with id ${favoriteId}`);
+  }
+
+  res.status(StatusCodes.OK).json({ fav });
+};

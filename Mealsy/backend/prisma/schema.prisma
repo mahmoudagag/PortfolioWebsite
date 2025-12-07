@@ -1,0 +1,49 @@
+// prisma/schema.prisma
+
+datasource db {
+  provider = "postgresql"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id        Int        @id @default(autoincrement())
+  firstname String     @db.VarChar(50)
+  lastname  String     @db.VarChar(50)
+  email     String     @unique
+  password  String     @db.VarChar(255)
+
+  favorites    Favorite[]
+  informations Information[]
+}
+
+model Information {
+  id           Int       @id @default(autoincrement())
+  name         String    @db.VarChar(50)
+  ingredients  String[] 
+  date         DateTime
+  color        String?
+  instructions String?
+  createdById  Int
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  // Relation to User
+  createdBy    User      @relation(fields: [createdById], references: [id])
+}
+
+model Favorite {
+  id           Int      @id @default(autoincrement())
+  name         String   @db.VarChar(50)
+  createdById  Int
+  ingredients  String[] 
+  instructions String?  
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  // Relations
+  createdBy User @relation(fields: [createdById], references: [id])
+}
+

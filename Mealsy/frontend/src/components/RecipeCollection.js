@@ -10,7 +10,7 @@ import {useNavigate} from 'react-router-dom';
 import axios from 'axios'
 
 export default function RecipeCollection() {
-    const URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:5000"
+    const URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:5001"
 
     const [ searchInput, setSearchInput ] = useState('');
     const [ buttonText, setButtonText ] = useState('Add to Calendar');

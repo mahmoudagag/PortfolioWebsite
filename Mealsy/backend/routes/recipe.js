@@ -1,9 +1,9 @@
-const express = require('express')
+import express from 'express'
 const router = express.Router()
-const {getRecipe, getUserProfile} = require('../controllers/recipe')
-
+import {getRecipe, getUserProfile} from '../controllers/recipe.js'
 
 router.route('/recipe').get(getRecipe)
 router.route('/nutrition').get(getUserProfile)
 
-module.exports = router
+export default router
+
