@@ -120,7 +120,7 @@ export default function StockInformationPage({displayModal}){
             yAxisLabel="Price"    
           />
         </Card>
-        <p className="text-gray-300 mt-8 mb-6">{readMore ? stockInformation.summary.substring(0, 100) : stockInformation.summary}
+        <p className="text-gray-300 mt-8 mb-6">{readMore && stockInformation.summary ? stockInformation.summary.substring(0, 100) : stockInformation.summary}
           <span className='text-gray-400' onClick={() => setReadMore(!readMore)}> {readMore ? "...Read More" : "Read Less"}</span>
         </p>
         <div className="flex justify-between">

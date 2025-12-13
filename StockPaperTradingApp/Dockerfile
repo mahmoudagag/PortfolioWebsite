@@ -1,51 +1,64 @@
-###### Stage 1: Build the React application
-FROM node:14-alpine as build_frontend
+##########################
+# Stage 1: Build React frontend
+##########################
+FROM node:14-alpine AS build_frontend
 
 WORKDIR /app
 
-# Copy package.json and package-lock.json (if available)
+# Copy package files first to leverage Docker cache
 COPY frontend/package*.json ./
 
 # Install dependencies
 RUN npm install --production
 
-# Set environment variable
+# Copy source code
+COPY frontend/ ./
+
+# Build React app for production
 ARG REACT_APP_BACKEND_URL
 ENV REACT_APP_BACKEND_URL=$REACT_APP_BACKEND_URL
-
-# Copy the rest of the application code
-COPY /frontend .
-
-# Build the React app for production
 RUN npm run build
 
-###### Stage 2: build backend
-FROM golang:1.21 AS build_backend
+##########################
+# Stage 2: Build Go backend
+##########################
+FROM golang:1.21-alpine AS build_backend
 
-# Set destination for COPY
 WORKDIR /build
 
-# Copy go mod and sum files
-COPY /backend/go.mod /backend/go.sum ./
+# Install git (needed if go.mod pulls from git) and ca-certificates for TLS
+RUN apk add --no-cache git ca-certificates
+
+# Copy go.mod and go.sum first (cache deps)
+COPY backend/go.mod backend/go.sum ./
 
 # Download dependencies
 RUN go mod download
 
-# Copy the rest of the source code
-COPY /backend .
+# Copy rest of source
+COPY backend/ ./
 
-# Build the Go app
-RUN CGO_ENABLED=0 GOOS=linux go build -o /build/StockPaperTrading
+# Build the Go binary statically (small, no libc dependency)
+RUN CGO_ENABLED=0 GOOS=linux go build -ldflags="-s -w" -o StockPaperTrading
 
-# ARG API_KEY
-# ENV API_KEY=$API_KEY
-# ARG MONGODB_URI
-# ENV MONGODB_URI=$MONGODB_URI
-# ARG JWT_ENCRIPTION_KEY
-# ENV JWT_ENCRIPTION_KEY=$JWT_ENCRIPTION_KEY
+##########################
+# Stage 3: Final minimal image
+##########################
+FROM alpine:3.18
 
-# Copy the built executable from builder stage
-COPY --from=build_frontend /app/build /build/build
+# Install ca-certificates for HTTPS calls
+RUN apk add --no-cache ca-certificates
 
-# Specify the command to run the executable
-CMD ["/build/StockPaperTrading"]
+WORKDIR /app
+
+# Copy Go binary
+COPY --from=build_backend /build/StockPaperTrading .
+
+# Copy built React frontend
+COPY --from=build_frontend /app/build ./build
+
+# Expose port (optional, useful for docker-compose)
+EXPOSE 8002
+
+# Run the Go app
+CMD ["./StockPaperTrading"]

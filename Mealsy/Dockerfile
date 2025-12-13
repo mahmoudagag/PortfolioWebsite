@@ -1,53 +1,32 @@
-
-
-# Stage 1: Build the React application
-FROM node:20-alpine as build
-
+# ---------- Stage 1: Build frontend ----------
+FROM node:20-alpine AS frontend-build
 WORKDIR /app
-
-# Copy package.json and package-lock.json (if available)
 COPY frontend/package*.json ./
-
-# Install dependencies
-RUN npm install --production
+RUN npm ci
 
 # Set environment variable
 ARG REACT_APP_BACKEND_URL
 ENV REACT_APP_BACKEND_URL=$REACT_APP_BACKEND_URL
 
-# Copy the rest of the application code
-COPY /frontend .
-
-# Build the React app for production
+COPY frontend .
 RUN npm run build
 
-# Stage 2: Run backend
+# ---------- Stage 2: Backend ----------
 FROM node:20-alpine
-
-# Set the working directory inside the container
 WORKDIR /app
 
-# ENV
-# ENV MONGO_URL=""
-# ENV JWT_SECRET=""
-# ENV JWT_LIFETIME=""
-# ENV API_KEY=""
-
-# Copy package.json and package-lock.json (if available)
+# Only production deps
 COPY backend/package*.json ./
+RUN npm ci --omit=dev
 
-# Install dependencies
-RUN npm install --production
+# Copy backend source
+COPY backend .
 
-COPY --from=build /app/build  /app/build
+# Generate Prisma client
+RUN npx prisma generate
 
-# Copy the rest of the application code
-COPY /backend .
+# Copy frontend build
+COPY --from=frontend-build /app/build ./build
 
-RUN npx prisma migrate deploy
-
-# Expose the port that the app runs on
 EXPOSE 7002
-
-# Command to run the application
 CMD ["node", "app.js"]

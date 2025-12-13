@@ -31,7 +31,7 @@ export default function ProjectCard({
       >
         <img src={images[0]} alt={title} className="w-full h-48 object-cover" />
         <div className="p-4">
-          <h3 className="text-xl font-semibold">{title}</h3>
+          <h3 className="text-xl text-black font-semibold">{title}</h3>
         </div>
       </div>
 

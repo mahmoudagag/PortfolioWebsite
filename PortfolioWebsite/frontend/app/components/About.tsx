@@ -9,7 +9,7 @@ export default function About() {
   return (
     <section id="about" className="py-20 bg-white">
       <div className="max-w-4xl mx-auto px-4 text-center">
-        <h2 className="text-4xl font-bold mb-6">About Me</h2>
+        <h2 className="text-4xl text-black font-bold mb-6">About Me</h2>
         
         <p className="mb-4 text-lg sm:text-xl text-gray-700">
           I’m a software engineer passionate about building efficient, scalable, and maintainable applications.

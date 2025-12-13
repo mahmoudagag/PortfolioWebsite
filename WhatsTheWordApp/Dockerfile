@@ -1,48 +1,43 @@
-
-
-# Stage 1: Build the React application
-FROM node:14-alpine as build
+# ---------- Stage 1: Build frontend ----------
+FROM node:14-alpine AS frontend-build
 
 WORKDIR /app
 
-# Copy package.json and package-lock.json (if available)
+# Copy package files first to leverage caching
 COPY frontend/package*.json ./
 
 # Install dependencies
-RUN npm install --production
+RUN npm ci --only=production
 
-# Set environment variable
+# Set build-time environment variables
 ARG REACT_APP_BASE_BACKEND_URL
-ENV REACT_APP_BASE_BACKEND_URL=$REACT_APP_BASE_BACKEND_URL
-
 ARG REACT_APP_WEBSOCKET_PATH
+ENV REACT_APP_BASE_BACKEND_URL=$REACT_APP_BASE_BACKEND_URL
 ENV REACT_APP_WEBSOCKET_PATH=$REACT_APP_WEBSOCKET_PATH
 
-# Copy the rest of the application code
-COPY /frontend .
+# Copy frontend source
+COPY frontend/ ./
 
-# Build the React app for production
+# Build the React app
 RUN npm run build
 
-# Stage 2: Run backend
+# ---------- Stage 2: Backend ----------
 FROM node:14-alpine
 
-# Set the working directory inside the container
 WORKDIR /app
 
-# Copy package.json and package-lock.json (if available)
+# Copy backend package files and install only production dependencies
 COPY backend/package*.json ./
+RUN npm ci --only=production
 
-# Install dependencies
-RUN npm install --production
+# Copy built frontend from previous stage
+COPY --from=frontend-build /app/build ./build
 
-COPY --from=build /app/build  /app/build
+# Copy backend source
+COPY backend/ ./
 
-# Copy the rest of the application code
-COPY /backend .
+# Expose port
+EXPOSE 5002
 
-# Expose the port that the app runs on
-EXPOSE 5000
-
-# Command to run the application
+# Start the backend
 CMD ["node", "app.js"]

@@ -77,7 +77,7 @@ export default function ProjectModal({
 
         {/* Content */}
         <div className="p-6">
-          <h2 className="text-2xl font-bold mb-4">{title}</h2>
+          <h2 className="text-2xl text-black font-bold mb-4">{title}</h2>
           <p className="mb-4 text-gray-700">{description}</p>
 
           {/* Technologies */}

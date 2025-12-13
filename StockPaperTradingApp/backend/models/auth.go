@@ -28,7 +28,6 @@ func (u *User) HashPassword() error {
 
 // ComparePasswords compares a plaintext password with the hashed one
 func (u *User) ComparePasswords(candidatePassword string) bool {
-	hashed, _ := bcrypt.GenerateFromPassword([]byte(u.Password), bcrypt.DefaultCost)
 	err := bcrypt.CompareHashAndPassword([]byte(u.Password), []byte(candidatePassword))
 	return err == nil
 }
