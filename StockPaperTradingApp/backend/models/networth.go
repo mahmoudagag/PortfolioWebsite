@@ -1,10 +1,10 @@
 package models
 
-import "go.mongodb.org/mongo-driver/bson/primitive"
+import "time"
 
 type Networth struct {
-	ID           primitive.ObjectID `json:"_id,omitempty" bson:"_id,omitempty"`
-	Networth     float64            `json:"networth,omitempty" bson:"networth,omitempty"`
-	Initiated_on primitive.DateTime `json:"initiated_on,omitempty" bson:"initiated_on,omitempty"`
-	User_id      primitive.ObjectID `json:"user_id,omitempty" bson:"user_id,omitempty"`
+	ID        uint      `gorm:"primaryKey" json:"id"`
+	Networth  float64   `gorm:"not null" json:"networth"`
+	CreatedAt time.Time `gorm:"autoCreateTime" json:"initiated_on"`
+	UserID    uint      `gorm:"not null" json:"user_id"` // foreign key to User
 }

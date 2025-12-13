@@ -14,7 +14,7 @@ import GlobalContext from "../../ContextWrapper";
 import { useNavigate } from "react-router-dom";
 
 export default function Header() {
-  const URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:8080"
+  const URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:8001"
   const { user, token, pages, setPage, setStockSymbol } = useContext(GlobalContext);
 
   const [autoComplete, setAutoComplete] = useState([]);

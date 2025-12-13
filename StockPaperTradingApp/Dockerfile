@@ -37,12 +37,12 @@ COPY /backend .
 # Build the Go app
 RUN CGO_ENABLED=0 GOOS=linux go build -o /build/StockPaperTrading
 
-ARG API_KEY
-ENV API_KEY=$API_KEY
-ARG MONGODB_URI
-ENV MONGODB_URI=$MONGODB_URI
-ARG JWT_ENCRIPTION_KEY
-ENV JWT_ENCRIPTION_KEY=$JWT_ENCRIPTION_KEY
+# ARG API_KEY
+# ENV API_KEY=$API_KEY
+# ARG MONGODB_URI
+# ENV MONGODB_URI=$MONGODB_URI
+# ARG JWT_ENCRIPTION_KEY
+# ENV JWT_ENCRIPTION_KEY=$JWT_ENCRIPTION_KEY
 
 # Copy the built executable from builder stage
 COPY --from=build_frontend /app/build /build/build

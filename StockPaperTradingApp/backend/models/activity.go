@@ -1,16 +1,20 @@
 package models
 
-import "go.mongodb.org/mongo-driver/bson/primitive"
+import (
+	"time"
+)
 
 type Activity struct {
-	ID           primitive.ObjectID `json:"_id,omitempty" bson:"_id,omitempty"`
-	Symbol       string             `json:"symbol,omitempty" bson:"symbol,omitempty"`
-	CompanyName  string             `json:"companyName,omitempty" bson:"companyName,omitempty"`
-	Quantity     int                `json:"quantity,omitempty" bson:"quantity,omitempty"`
-	Side         string             `json:"side,omitempty" bson:"side,omitempty"`
-	Price        float64            `json:"price,omitempty" bson:"price,omitempty"`
-	Initiated_on primitive.DateTime `json:"initiated_on,omitempty" bson:"initiated_on,omitempty"`
-	User_id      primitive.ObjectID `json:"user_id,omitempty" bson:"user_id,omitempty"`
+	ID          uint      `gorm:"primaryKey" json:"id"`
+	Symbol      string    `gorm:"size:10;not null" json:"symbol"`
+	CompanyName string    `gorm:"size:100" json:"companyName"`
+	Quantity    int       `gorm:"not null" json:"quantity"`
+	Side        string    `gorm:"size:4;not null" json:"side"` // e.g., "BUY" or "SELL"
+	Price       float64   `gorm:"not null" json:"price"`
+	InitiatedOn time.Time `gorm:"not null" json:"initiated_on"`
+	UserID      uint      `gorm:"not null" json:"user_id"` // foreign key to User table
 }
 
-// include totalValue = quant*price in front end
+func (a *Activity) TotalValue() float64 {
+	return float64(a.Quantity) * a.Price
+}

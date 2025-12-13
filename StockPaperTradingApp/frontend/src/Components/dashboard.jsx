@@ -11,11 +11,13 @@ import { useNavigate } from "react-router-dom";
 import BuySellModal from "./buySellModal.jsx";
 
 export default function Dashboard() {
-  const URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:8080"
+  const URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:8001"
 
   const {
     setToken,
+    token,
     setUser,
+    user,
     setHolding,
     setActivity,
     setDashboardData,
@@ -35,10 +37,14 @@ export default function Dashboard() {
 
   useEffect(() => {
     const storedToken = localStorage.getItem("Token");
-    if (storedToken === null) {
-      navigate("/login");
+    if (storedToken){
+      LoginWithToken(storedToken)
+    }else if(token || user){
+      if (GetAllData(token)){
+        setPage(pages.home)
+      }
     }else{
-      LoginWithToken(storedToken);
+      navigate("/login");
     }
   },[]);
 

@@ -9,7 +9,7 @@ import { FaLock } from "react-icons/fa";
 
 export const Register = () => {
 
-  const URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:8080"
+  const URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:8001"
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -51,6 +51,7 @@ export const Register = () => {
       if (document.getElementById("rememberMe").checked) {
         localStorage.setItem("Token", result.token);
       }
+      navigate("/");
     } else if (response.status === 409) {
       setEmailError("Email already exists");
     } else {

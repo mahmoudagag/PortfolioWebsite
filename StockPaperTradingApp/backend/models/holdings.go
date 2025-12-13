@@ -1,11 +1,9 @@
 package models
 
-import "go.mongodb.org/mongo-driver/bson/primitive"
-
 type Holdings struct {
-	ID          primitive.ObjectID `json:"_id,omitempty" bson:"_id,omitempty"`
-	Symbol      string             `json:"symbol,omitempty" bson:"symbol,omitempty"`
-	CompanyName string             `json:"companyName,omitempty" bson:"companyName,omitempty"`
-	Quantity    int                `json:"quantity,omitempty" bson:"quantity,omitempty"`
-	User_id     primitive.ObjectID `json:"user_id,omitempty" bson:"user_id,omitempty"`
+	ID          uint   `gorm:"primaryKey" json:"id"`
+	Symbol      string `gorm:"size:10;not null" json:"symbol"`
+	CompanyName string `gorm:"size:100" json:"companyName"`
+	Quantity    int    `gorm:"not null" json:"quantity"`
+	UserID      uint   `gorm:"not null" json:"user_id"` // foreign key to User
 }

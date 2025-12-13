@@ -5,7 +5,7 @@ import Loading from './loading';
 
 export default function StockInformationPage({displayModal}){
 
-  const URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:8080"
+  const URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:8001"
   const {token, sides, stockSymbol} = useContext(GlobalContext)
   const wasCalled = useRef(false);
   const [stockInformation, setStockInformation] = useState(null)

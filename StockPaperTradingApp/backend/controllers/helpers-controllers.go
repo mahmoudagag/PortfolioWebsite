@@ -1,107 +1,104 @@
 package controllers
 
 import (
-	"StockPaperTradingApp/db"
-	"StockPaperTradingApp/models"
-	"context"
 	"encoding/json"
-	"io"
 	"net/http"
 	"net/url"
 	"os"
 	"strings"
 	"time"
 
-	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive"
-	"go.mongodb.org/mongo-driver/mongo/options"
+	"StockPaperTradingApp/db"
+	"StockPaperTradingApp/models"
 )
 
 type HelperController interface {
 	SendRequest(rawUrl string) map[string]any
 	GetStockInformation(symbols []string) []any
-	GetHoldings(id primitive.ObjectID) []models.Holdings
+	GetHoldings(userID uint) []models.Holdings
 	UpdateNetworths()
 }
 
-// varables
+// variables
 type helperController struct{}
 
-// contructor
+// constructor
 func Helper() HelperController {
 	return &helperController{}
 }
 
 func (c *helperController) SendRequest(rawUrl string) map[string]any {
-	var apiToken = os.Getenv("API_KEY")
-	r, _ := http.NewRequest(http.MethodGet, rawUrl, nil)
-	r.Header.Set("x-api-key", apiToken)
+	apiToken := os.Getenv("API_KEY")
+	if apiToken == "" {
+		apiToken = "tZa6ihrqO217vvPdFvs0q5jc4FCFZseS52YGNnfL"
+	}
+	req, _ := http.NewRequest(http.MethodGet, rawUrl, nil)
+	req.Header.Set("x-api-key", apiToken)
+	req.Header.Set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
+
 	client := &http.Client{}
-	resp, _ := client.Do(r)
-	// read response body
-	body, _ := io.ReadAll(resp.Body)
-	// close response body (idk)
+	resp, _ := client.Do(req)
 	defer resp.Body.Close()
+
 	var res map[string]any
-	json.Unmarshal(body, &res)
+	json.NewDecoder(resp.Body).Decode(&res)
 	return res
 }
 
 func (c *helperController) GetStockInformation(symbols []string) []any {
-	var quriesList [][]string
+	var queriesList [][]string
 	var curr []string
+
 	for _, sym := range symbols {
 		curr = append(curr, sym)
 		if len(curr) == 10 {
-			quriesList = append(quriesList, curr)
+			queriesList = append(queriesList, curr)
 			curr = []string{}
 		}
 	}
 	if len(curr) > 0 {
-		quriesList = append(quriesList, curr)
+		queriesList = append(queriesList, curr)
 	}
 
 	var results []any
+	baseURL := "https://yfapi.net"
 	rawURL := baseURL + "/v6/finance/quote?region=US&lang=en&symbols="
-	for _, queryArray := range quriesList {
+
+	for _, queryArray := range queriesList {
 		query := strings.Join(queryArray, ",")
-		encodedquery := url.PathEscape(query)
-		var res = c.SendRequest(rawURL + encodedquery)
+		encodedQuery := url.PathEscape(query)
+		res := c.SendRequest(rawURL + encodedQuery)
 		information := res["quoteResponse"].(map[string]any)["result"].([]any)
 		results = append(results, information...)
 	}
+
 	return results
 }
 
-func (c *helperController) GetHoldings(id primitive.ObjectID) []models.Holdings {
-	filter := bson.D{{Key: "user_id", Value: id}}
-	cursor, _ := db.GetHoldingsCollection().Find(context.TODO(), filter, options.Find())
-	var results []models.Holdings
-	cursor.All(context.TODO(), &results)
-	return results
+func (c *helperController) GetHoldings(userID uint) []models.Holdings {
+	var holdings []models.Holdings
+	db.DB.Where("user_id = ?", userID).Find(&holdings)
+	return holdings
 }
 
 func (c *helperController) UpdateNetworths() {
 	// Get all users
-	cursor, _ := db.GetUserCollection().Find(context.TODO(), bson.D{}, options.Find())
 	var users []models.User
-	cursor.All(context.TODO(), &users)
+	db.DB.Find(&users)
 
-	// for each user
 	for _, user := range users {
-		// get holdings
 		holdings := c.GetHoldings(user.ID)
-		// calculate asset
-		var listOfSymbols []string
+
+		// calculate asset worth
 		symbolToQuantity := make(map[string]int)
+		var listOfSymbols []string
 		for _, h := range holdings {
 			symbolToQuantity[h.Symbol] = h.Quantity
 			listOfSymbols = append(listOfSymbols, h.Symbol)
 		}
 
-		// calculate asset worth
 		symbolsInformation := c.GetStockInformation(listOfSymbols)
-		var assetsWorth = 0.00
+		var assetsWorth float64 = 0
 		for _, symbolInfo := range symbolsInformation {
 			symbol := symbolInfo.(map[string]any)["symbol"].(string)
 			price := symbolInfo.(map[string]any)["regularMarketPrice"].(float64)
@@ -110,11 +107,11 @@ func (c *helperController) UpdateNetworths() {
 		}
 
 		// save networth
-		var networth = models.Networth{
-			Networth:     user.Cash + assetsWorth,
-			Initiated_on: primitive.NewDateTimeFromTime(time.Now().UTC()),
-			User_id:      user.ID,
+		networth := models.Networth{
+			Networth:  user.Cash + assetsWorth,
+			CreatedAt: time.Now().UTC(),
+			UserID:    user.ID,
 		}
-		db.GetNetworthCollection().InsertOne(context.TODO(), networth)
+		db.DB.Create(&networth)
 	}
 }

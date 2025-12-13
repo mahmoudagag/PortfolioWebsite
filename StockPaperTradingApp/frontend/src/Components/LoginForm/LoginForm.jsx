@@ -8,7 +8,7 @@ import { FaUser } from "react-icons/fa";
 import { FaLock } from "react-icons/fa";
 
 export const LoginForm = (props) => {
-  const URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:8080"
+  const URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:8001"
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -16,11 +16,11 @@ export const LoginForm = (props) => {
   const [passwordError, setPasswordError] = useState("");
 
   const navigate = useNavigate();
-  const { setUser, setToken } = useContext(GlobalContext);
+  const { user, setUser, token, setToken } = useContext(GlobalContext);
 
   useEffect(() => {
     let storedToken = localStorage.getItem("Token");
-    if (storedToken) {
+    if (storedToken || token || user) {
       navigate("/");
     }
   });

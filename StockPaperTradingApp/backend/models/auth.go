@@ -1,48 +1,57 @@
 package models
 
 import (
-	"log"
 	"os"
 	"time"
 
 	"github.com/golang-jwt/jwt"
-	"github.com/joho/godotenv"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 	"golang.org/x/crypto/bcrypt"
 )
 
 type User struct {
-	ID       primitive.ObjectID `json:"_id,omitempty" bson:"_id,omitempty"`
-	UserName string             `json:"username,omitempty" bson:"username,omitempty"`
-	Email    string             `json:"email,omitempty" bson:"email,omitempty"`
-	Password string             `json:"password,omitempty" bson:"password,omitempty"`
-	Cash     float64            `json:"cash,omitempty" bson:"cash,omitempty"`
+	ID       uint    `gorm:"primaryKey" json:"id"`
+	UserName string  `gorm:"size:50;not null" json:"username"`
+	Email    string  `gorm:"size:100;unique;not null" json:"email"`
+	Password string  `gorm:"size:255;not null" json:"password"`
+	Cash     float64 `gorm:"default:0" json:"cash"`
 }
 
-func (u *User) HashPassword() {
-	result, _ := bcrypt.GenerateFromPassword([]byte(u.Password), bcrypt.DefaultCost)
-	u.Password = string(result)
+// HashPassword hashes the user's password
+func (u *User) HashPassword() error {
+	hashed, err := bcrypt.GenerateFromPassword([]byte(u.Password), bcrypt.DefaultCost)
+	if err != nil {
+		return err
+	}
+	u.Password = string(hashed)
+	return nil
 }
 
-func (u *User) ComparePasswords(canditatePassword []byte) bool {
-	err := bcrypt.CompareHashAndPassword(canditatePassword, []byte(u.Password))
+// ComparePasswords compares a plaintext password with the hashed one
+func (u *User) ComparePasswords(candidatePassword string) bool {
+	hashed, _ := bcrypt.GenerateFromPassword([]byte(u.Password), bcrypt.DefaultCost)
+	err := bcrypt.CompareHashAndPassword([]byte(u.Password), []byte(candidatePassword))
 	return err == nil
 }
 
+// CreateJWT generates a JWT token for the user
 func (u *User) CreateJWT() (string, error) {
-	if err := godotenv.Load(); err != nil {
-		log.Println("No .env file found")
+	encryptionKey := os.Getenv("JWT_ENCRYPTION_KEY")
+	if encryptionKey == "" {
+		encryptionKey = "FkdcFb5Dsa"
 	}
-	encriptionKey := os.Getenv("JWT_ENCRIPTION_KEY")
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256,
-		jwt.MapClaims{
-			"id":  u.ID,
-			"exp": time.Now().Add(time.Hour * 24).Unix(),
-		})
-	tokenString, err := token.SignedString([]byte(encriptionKey))
 
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"user_id": u.ID,
+		"exp":     time.Now().Add(24 * time.Hour).Unix(),
+	})
+	tokenString, err := token.SignedString([]byte(encryptionKey))
 	if err != nil {
 		return "", err
 	}
 	return tokenString, nil
 }
+
+// Optional: before saving a user, hash the password automatically
+// func (u *User) BeforeCreate(tx *gorm.DB) (err error) {
+// 	return u.HashPassword()
+// }

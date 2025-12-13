@@ -5,7 +5,7 @@ import { Slider } from "@mui/material";
 
 export default function BuySellModal({shouldOpen, setShouldOpen, side, setSide, getAllData}){
 
-    const URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:8080"
+    const URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:8001"
 
     const {token, user, holding, sides, stockSymbol} = useContext(GlobalContext)
     const [stockInformation, setStockInformation] = useState(null)
@@ -72,7 +72,7 @@ export default function BuySellModal({shouldOpen, setShouldOpen, side, setSide, 
             setShouldOpen(false)
             return
         }
-        const url = `${URL}}/api/` + (side === sides.buy ? "buyStock" : "sellStock")
+        const url = `${URL}/api/` + (side === sides.buy ? "buyStock" : "sellStock")
         const response = await fetch(url, {
             method: "POST",
             headers: {
@@ -117,7 +117,7 @@ export default function BuySellModal({shouldOpen, setShouldOpen, side, setSide, 
                 </div>
   
                 <div className="text-3xl text-tremor-content-strong dark:text-dark-tremor-content-strong font-semibold w-max mt-auto mb-auto">
-                    {value === 0 ? "" : (side === sides.buy ? "-" : "+")}${(value*stockInformation.regularMarketPrice).toFixed(2)}
+                    {value === 0 ? "" : (side === sides.buy ? "" : "+")}${(value*stockInformation.regularMarketPrice).toFixed(2)}
                 </div>
             </div>
             <div className="flex">

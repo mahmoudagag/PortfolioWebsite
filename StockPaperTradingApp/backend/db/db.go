@@ -1,45 +1,44 @@
 package db
 
 import (
-	"context"
+	"fmt"
 	"log"
 	"os"
 
+	"StockPaperTradingApp/models"
+
 	"github.com/joho/godotenv"
-	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 )
 
-var client *mongo.Client
+var DB *gorm.DB
 
 func ConnectToDB() {
 	if err := godotenv.Load(); err != nil {
 		log.Println("No .env file found")
 	}
-	uri := os.Getenv("MONGODB_URI")
-	if uri == "" {
-		log.Fatal("You must set your 'MONGODB_URI' environment variable. See\n\t https://www.mongodb.com/docs/drivers/go/current/usage-examples/#environment-variable")
+
+	// Use env variable if set, otherwise fallback to default
+	// dsn = "host=localhost user=postgres password=yourpassword dbname=mydb port=5432 sslmode=disable"
+	dsn := os.Getenv("DATABASE_URL")
+	if dsn == "" {
+		log.Println("DATABASE_URL not set, using default local database")
+		dsn = "host=localhost user=mahmoudagag dbname=stocktrading port=5432 sslmode=disable"
 	}
-	print(uri)
-	connection, err := mongo.Connect(context.TODO(), options.Client().ApplyURI(uri))
+
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
-		panic(err)
+		log.Fatal("Failed to connect to database:", err)
 	}
-	client = connection
+
+	DB = db
+	fmt.Println("Connected to PostgreSQL!")
 }
 
-func GetUserCollection() *mongo.Collection {
-	return client.Database("StockPaperTradingApp").Collection("User")
-}
-
-func GetHoldingsCollection() *mongo.Collection {
-	return client.Database("StockPaperTradingApp").Collection("Holdings")
-}
-
-func GetActivityCollection() *mongo.Collection {
-	return client.Database("StockPaperTradingApp").Collection("Activity")
-}
-
-func GetNetworthCollection() *mongo.Collection {
-	return client.Database("StockPaperTradingApp").Collection("Networth")
+func MigrateTables() {
+	err := DB.AutoMigrate(&models.User{}, &models.Holdings{}, &models.Activity{}, &models.Networth{})
+	if err != nil {
+		log.Fatal("Failed to migrate database:", err)
+	}
 }

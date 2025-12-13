@@ -14,6 +14,7 @@ import (
 func main() {
 	server := gin.Default()
 	db.ConnectToDB()
+	db.MigrateTables()
 	server.Use(middlewares.CORSMiddleware())
 
 	// updates networth for all user at 4:30:00 everyday
@@ -63,8 +64,8 @@ func main() {
 	server.Use(static.Serve("/", static.LocalFile("./build", true)))
 	port := os.Getenv("PORT")
 	if port == "" {
-		println("listening to port: 8080")
-		server.Run(":8080")
+		println("listening to port: 8001")
+		server.Run(":8001")
 	} else {
 		println("listening to port: " + port)
 		server.Run(":" + port)
