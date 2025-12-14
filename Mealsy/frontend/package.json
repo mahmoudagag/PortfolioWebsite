@@ -1,6 +1,5 @@
 {
   "name": "frontend2",
-  "homepage": "/mealsy/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

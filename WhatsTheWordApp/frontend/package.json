@@ -1,6 +1,5 @@
 {
   "name": "whatsthewordfrontend",
-  "homepage": "/whatstheword/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

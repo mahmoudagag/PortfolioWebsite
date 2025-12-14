@@ -19,6 +19,8 @@ ENV REACT_APP_WEBSOCKET_PATH=$REACT_APP_WEBSOCKET_PATH
 COPY frontend/ ./
 
 # Build the React app
+ARG BACKEND_URL
+ENV PUBLIC_URL=$BACKEND_URL
 RUN npm run build
 
 # ---------- Stage 2: Backend ----------
