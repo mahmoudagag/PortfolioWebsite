@@ -1,0 +1,2 @@
+CREATE DATABASE mealsy;
+CREATE DATABASE stocktrading;

@@ -8,6 +8,8 @@ services:
     restart: always             # Restart policy
     environment:
       - PORT=3002
+    networks:
+      - backend
 
   whatstheword:
     build:
@@ -22,6 +24,8 @@ services:
     restart: always             # Restart policy
     environment:
       - PORT=5002
+    networks:
+      - backend
 
   stockpapertrading:
     build:
@@ -38,6 +42,11 @@ services:
       DATABASE_URL: ${STOCKPAPERTRADING_DATABASE_URL}
       API_KEY: ${STOCKPAPERTRADING_API_KEY}
       JWT_ENCRIPTION_KEY: ${STOCKPAPERTRADING_JWT_ENCRIPTION_KEY}
+    depends_on:
+      postgresql:
+        condition: service_healthy
+    networks:
+      - backend
 
   mealsy:
     build:
@@ -56,6 +65,31 @@ services:
       JWT_SECRET: ${MEALSY_JWT_SECRET}
       JWT_LIFETIME: ${MEALSY_JWT_LIFETIME}
       API_KEY: ${MEALSY_API_KEY}
+    depends_on:
+      postgresql:
+        condition: service_healthy
+    networks:
+      - backend
+
+  postgresql:
+    image: postgres:16-alpine
+    container_name: postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./postgres/init:/docker-entrypoint-initdb.d
+    ports:
+      - "5433:5432" # OPTIONAL (for local access from your machine)
+    networks:
+      - backend
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U mahmoudagag"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   nginx:
     build:
@@ -64,12 +98,21 @@ services:
     ports:
       - "80:80"
     environment:
-      DOMAIN_NAME: localhost
+      DOMAIN_NAME: ${NGINX_DOMAIN_NAME}
     depends_on:
       - whatstheword
       - portfoliowebsite
       - stockpapertrading
       - mealsy
+    networks:
+      - backend
+  
+volumes:
+  pgdata:
+  
+networks:
+  backend:
+    driver: bridge
 ### ASL/ 
 
 # to build: docker compose up --build

@@ -24,6 +24,11 @@ http {
 
         server_name ${DOMAIN_NAME};
 
+        # Redirect everything to HTTPS
+        if ($http_x_forwarded_proto = "http") {
+            return 301 https://$host$request_uri;
+        }
+
         location /whatstheword/ {
             proxy_pass http://whatstheword:5002/;
             proxy_redirect off;
