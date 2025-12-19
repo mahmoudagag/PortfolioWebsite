@@ -3,6 +3,13 @@ import {BadRequestError, UnauthenticatedError, ConflictRequestError} from '../er
 import { hashPassword, createJWT, comparePassword } from "../utils/jwt.js";
 import prisma from '../db/connect.js'
 
+const cookieOptions = {
+    httpOnly: true,
+    secure: true,
+    sameSite: process.env.ENV === "PRODUCTION" ? "Strict" : "None",
+    maxAge: 1000 * 60 * 60 * 24, // 1 day
+}
+
 const register = async (req,res) => {
     const { firstname, lastname, email, password } = req.body;
 
@@ -24,7 +31,8 @@ const register = async (req,res) => {
         },
     });
     const token = createJWT(user)
-    res.status(StatusCodes.CREATED).json({user:{firstname:user.firstname,lastname:user.lastname,email:user.email}, token})
+    res.cookie("token", token, cookieOptions)
+    res.status(StatusCodes.CREATED).json({user:{firstname:user.firstname,lastname:user.lastname,email:user.email}})
     
 }
 
@@ -47,6 +55,7 @@ const login = async (req,res) => {
         throw new UnauthenticatedError('Invalid Credentioanls')
     }
     const token = createJWT(user)
-    res.status(StatusCodes.OK).json({user:{firstname:user.firstname,lastname:user.lastname,email:user.email}, token})
+    res.cookie("token", token, cookieOptions)
+    res.status(StatusCodes.OK).json({user:{firstname:user.firstname,lastname:user.lastname,email:user.email}})
 }
 export {register , login}

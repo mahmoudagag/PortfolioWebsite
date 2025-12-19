@@ -12,10 +12,7 @@ const labelsClasses = [
 ];
 
 export default function EventModal() {
-    const URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:5001"
-
-    const {
-        token,
+   const {
         setShowEventModal,
         daySelected,
         dispatchCalEvent,
@@ -76,17 +73,17 @@ export default function EventModal() {
         const options = {
             headers:{
                 'Content-Type': 'application/json',
-                'authorization': 'Bearer ' + token
-            }
+            },
+            withCredentials: true
         }
         if(selectedEvent){
             //update
-            const url = `${URL}/api/info/${selectedEvent.id}`
+            const url = `/mealsy/api/info/${selectedEvent.id}`
             const res = await axios.patch(url,body,options)
             handleSubmit(res.data.info._id)
         }else{
             //create
-            const url = `${URL}/api/info`
+            const url = "/mealsy/api/info"
             const res = await axios.post(url,body,options)
             handleSubmit(res.data.info._id)
 
@@ -94,12 +91,12 @@ export default function EventModal() {
     }
     async function deleteInformation(){
         // when trash is selected
-        const url = `${URL}/api/info/${selectedEvent.id}`
+        const url = `/mealsy/api/info/${selectedEvent.id}`
         const options = {
             headers:{
                 'Content-Type': 'application/json',
-                'authorization': 'Bearer ' + token
-            }
+            },
+            withCredentials: true
         }
         await axios.delete(url,options)
         dispatchCalEvent({
@@ -113,7 +110,7 @@ export default function EventModal() {
         setFavorite(!favorite)
         if (fav){
             //save favorite
-            const url = `${URL}/api/favorite`
+            const url = "/mealsy/api/favorite"
             const title = document.getElementById('title').value
             const instructions = document.getElementById('instructions').value
             const ingredients = document.getElementById('ingredients').value
@@ -121,20 +118,20 @@ export default function EventModal() {
             const options = {
                 headers:{
                     'Content-Type': 'application/json',
-                    'authorization': 'Bearer ' + token
-                }
+                },
+                withCredentials: true
             }
             const body = {name:title,ingredients:arrIng,instructions} 
             const res = await axios.post(url,body,options)
             setFavID(res.data.fav._id)
         }else{  
             // delete favorite
-            const url = `${URL}/api/favorite/${favID}`
+            const url = `/mealsy/api/favorite/${favID}`
             const options = {
                 headers:{
                     'Content-Type': 'application/json',
-                    'authorization': 'Bearer ' + token
-                }
+                },
+                withCredentials: true
             }
             const res = await axios.delete(url,options)
             setFavID('')

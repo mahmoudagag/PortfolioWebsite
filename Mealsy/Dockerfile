@@ -4,13 +4,19 @@ WORKDIR /app
 COPY frontend/package*.json ./
 RUN npm ci
 
-# Set environment variable
-ARG REACT_APP_BACKEND_URL
-ENV REACT_APP_BACKEND_URL=$REACT_APP_BACKEND_URL
+# for api calls
+ARG APP_NAME
+ENV REACT_APP_BACKEND_URL=$APP_NAME
 
 COPY frontend .
-ARG BACKEND_URL
-ENV PUBLIC_URL=$BACKEND_URL
+
+## for path for manifest
+ARG APP_NAME
+ENV PUBLIC_URL=$APP_NAME
+## To know the environment
+# ARG ENV
+# ENV ENV=$ENV
+
 RUN npm run build
 
 # ---------- Stage 2: Backend ----------

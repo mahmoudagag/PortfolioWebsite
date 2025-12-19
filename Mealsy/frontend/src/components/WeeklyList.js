@@ -3,9 +3,7 @@ import GlobalContext from "../context/GlobalContext";
 import axios from "axios";
 
 export default function WeeklyList() {
-    const URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:5001"
-
-    const { token, setShowWeeklyModal } = useContext(GlobalContext);
+    const { setShowWeeklyModal } = useContext(GlobalContext);
 
     const [weekly,setWeekly] = useState([])
     useEffect( () =>{
@@ -13,12 +11,12 @@ export default function WeeklyList() {
     },[])
 
     async function getData(){
-        const url = `${URL}/api/info` 
+        const url = "/mealsy/api/info" 
         const options = {
             headers:{
                 'Content-Type': 'application/json',
-                'authorization': 'Bearer ' + token
-            }
+            },
+            withCredentials: true
         }
         const res = await axios(url,options)
         const today = new Date()

@@ -10,8 +10,6 @@ import {useNavigate} from 'react-router-dom';
 import axios from 'axios'
 
 export default function RecipeCollection() {
-    const URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:5001"
-
     const [ searchInput, setSearchInput ] = useState('');
     const [ buttonText, setButtonText ] = useState('Add to Calendar');
     const [ title, setTitle ] = useState('');
@@ -72,12 +70,12 @@ export default function RecipeCollection() {
 
     async function handleSearch(e) {
         e.preventDefault();
-        const url = `${URL}/api/api/recipe?name=${searchInput}` 
+        const url = `/mealsy/api/api/recipe?name=${searchInput}` 
         const options = {
             headers:{
                 'Content-Type': 'application/json',
-                'authorization': 'Bearer ' + token
-            }
+            },
+            withCredentials: true
         }
         const res = await axios.get(url,options)
         setRecipes(res.data)
@@ -95,10 +93,10 @@ export default function RecipeCollection() {
         const options = {
             headers:{
                 'Content-Type': 'application/json',
-                'authorization': 'Bearer ' + token
-            }
+            },
+            withCredentials: true
         }
-        const url = `${URL}/api/info`
+        const url = "/mealsy/api/info"
         const res = await axios.post(url,body,options)
         const calendarEvent = {
             title,

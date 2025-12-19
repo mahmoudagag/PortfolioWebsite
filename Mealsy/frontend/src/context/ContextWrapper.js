@@ -27,7 +27,6 @@ function savedEventsReducer(state, { type, payload }) {
 
 export default function ContextWrapper(props) {
     const [ user, setUser] = useState(null)
-    const [ token, setToken] = useState(null)
     const [ monthIndex, setMonthIndex ] = useState(dayjs().month());
     const [ smallCalendarMonth, setSmallCalendarMonth ] = useState(null);
     const [ daySelected, setDaySelected ] = useState(dayjs());
@@ -115,8 +114,6 @@ export default function ContextWrapper(props) {
                 setShowWeeklyModal,
                 showFavoritesModal,
                 setShowFavoritesModal,
-                token,
-                setToken,
                 user,
                 setUser,
             }}

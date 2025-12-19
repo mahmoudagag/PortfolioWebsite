@@ -5,9 +5,7 @@ import axios from 'axios';
 import GlobalContext from "../context/GlobalContext";
 
 export default function SignUp() {
-    const URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:5001"
-
-    const { setToken,setUser } = useContext(GlobalContext)
+    const { setUser } = useContext(GlobalContext)
 
     const navigate = useNavigate();
 
@@ -21,9 +19,8 @@ export default function SignUp() {
             return
         }
         const body = {"firstname":firstname,"lastname":lastname,"email":email,"password":password}
-        const res = await axios.post(`${URL}/api/auth/register`,body)
+        const res = await axios.post("/mealsy/api/auth/register",body)
         if (res.data){
-            setToken(res.data.token)
             setUser(res.data.user)
             navigate('/')
         }

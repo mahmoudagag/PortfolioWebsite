@@ -4,9 +4,7 @@ import axios from "axios";
 import {useNavigate} from 'react-router-dom';
 
 export default function Profile() {
-    const URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:5001"
-
-    const { token, user, savedEvents } = useContext(GlobalContext)
+    const { user, savedEvents } = useContext(GlobalContext)
     const navigate = useNavigate();
     const [ details, setDetails] = useState([
         { name: 'Calories', statistic: 0, spanner: 'egg_alt' },
@@ -16,39 +14,36 @@ export default function Profile() {
         { name: 'Sugar', statistic: 0, spanner: 'icecream' },
     ])
     useEffect( () =>{
-        console.log(user)
-        if (token === null){
-            navigate('/login')
-        }else{
             getProfile()
-        }
     },[])
 
     async function getProfile(){
-        const url = `${URL}/api/api/nutrition` 
+        const url = `/mealsy/api/api/nutrition` 
         const options = {
             headers:{
                 'Content-Type': 'application/json',
-                'authorization': 'Bearer ' + token
-            }
+            },
+            withCredentials: true
         }
-        const res = await axios.get(url,options)
-        
-        if (res.data.length > 0){
-            let curr =[{ name: 'Calories', statistic: 0, spanner: 'egg_alt' },
-                { name: 'Proteins', statistic: 0, spanner: 'kebab_dining' },
-                { name: 'Potassium', statistic: 0, spanner: 'soup_kitchen' },
-                { name: 'Sodium', statistic: 0, spanner: 'local_pizza' },
-                { name: 'Sugar', statistic: 0, spanner: 'icecream' }]
-            res.data.forEach( obj => {
-                curr[0].statistic += obj.calories
-                curr[1].statistic += obj.protein_g
-                curr[3].statistic += obj.sodium_mg
-                curr[2].statistic += obj.potassium_mg
-                curr[4].statistic += obj.sugar_g
-            })
-            console.log(curr)
-            setDetails(curr)
+        try{
+            const res = await axios.get(url,options)  
+            if (res.data.length > 0){
+                let curr =[{ name: 'Calories', statistic: 0, spanner: 'egg_alt' },
+                    { name: 'Proteins', statistic: 0, spanner: 'kebab_dining' },
+                    { name: 'Potassium', statistic: 0, spanner: 'soup_kitchen' },
+                    { name: 'Sodium', statistic: 0, spanner: 'local_pizza' },
+                    { name: 'Sugar', statistic: 0, spanner: 'icecream' }]
+                res.data.forEach( obj => {
+                    curr[0].statistic += obj.calories
+                    curr[1].statistic += obj.protein_g
+                    curr[3].statistic += obj.sodium_mg
+                    curr[2].statistic += obj.potassium_mg
+                    curr[4].statistic += obj.sugar_g
+                })
+                setDetails(curr)
+            }
+        }catch{
+            navigate('/login')
         }
     }
     return (

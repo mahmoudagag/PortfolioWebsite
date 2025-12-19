@@ -12,23 +12,13 @@ import {useNavigate} from 'react-router-dom';
 import axios from "axios";
 
 export default function Calendar() {
-    const URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:5001"
-
     const [ currenMonth, setCurrentMonth ] = useState(getMonth());
-    const { token, monthIndex, showEventModal, showDailyModal, showWeeklyModal, showFavoritesModal, dispatchCalEvent } = useContext(GlobalContext);
+    const { monthIndex, showEventModal, showDailyModal, showWeeklyModal, showFavoritesModal, dispatchCalEvent } = useContext(GlobalContext);
     
-    const isMounted = React.useRef(false);
     const navigate = useNavigate();
     
-    useEffect( () =>{
-        if (token === null){
-            navigate('/login')
-        }else{
-            if (!isMounted.current){
-                loadData()
-            }
-            isMounted.current = true;
-        }
+    useEffect( () => {
+        loadData()
     },[])
 
     useEffect(() => {
@@ -37,24 +27,29 @@ export default function Calendar() {
 
     async function loadData(){
         dispatchCalEvent({type:"reset",payload:{}})
-        const url = `${URL}/api/info` 
+        const url = "/mealsy/api/info" 
         const options = {
             headers:{
                 'Content-Type': 'application/json',
-                'authorization': 'Bearer ' + token
-            }
+            },
+            withCredentials: true
         }
-        const res = await axios(url,options)
-        res.data.info.map( obj => {
-            dispatchCalEvent({ type: "push", payload: {
-                title:obj.name,
-                description:obj.ingredients.join(),
-                label:obj.color,
-                instructions:obj.instructions,
-                day : obj.date.valueOf(),
-                id:obj._id
-            } })
-        })
+        try{
+            const res = await axios(url,options)
+            res.data.info.map( obj => {
+                dispatchCalEvent({ type: "push", payload: {
+                    title:obj.name,
+                    description:obj.ingredients.join(),
+                    label:obj.color,
+                    instructions:obj.instructions,
+                    day : obj.date.valueOf(),
+                    id:obj._id
+                } })
+            })
+        }
+        catch{
+            navigate('/login')
+        }
     }
 
     return (

@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import GlobalContext from "../context/GlobalContext";
 
 export default function HomePage() {
-    const { token } = useContext(GlobalContext);
     
     return (
         <div className="max-h-screen">
@@ -19,7 +18,7 @@ export default function HomePage() {
                             </p>
                             <div className="mt-5 flex gap-x-4 justify-center relative  max-h-screen">
                                 <img src={soup} alt="foodImage" className="w-auto sm:w-8/12 max-h-screen"></img>
-                                <Link to={ token === null ? '/sign-up' : '/calendar'} className="animate-bounce absolute top-0 drop-shadow-lg px-8 inline-block rounded-lg bg-green-800 px-4 py-1.5 text-base font-semibold leading-7 text-white shadow-sm ring-1 ring-green-700 hover:bg-green-900 hover:ring-green-800 w-1/3 text-center max-h-screen min-w-[100px]">
+                                <Link to='/calendar' className="animate-bounce absolute top-0 drop-shadow-lg px-8 inline-block rounded-lg bg-green-800 px-4 py-1.5 text-base font-semibold leading-7 text-white shadow-sm ring-1 ring-green-700 hover:bg-green-900 hover:ring-green-800 w-1/3 text-center max-h-screen min-w-[100px]">
                                     Start Planning &#8594;</Link></div>
                         </div>
 

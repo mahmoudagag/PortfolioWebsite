@@ -4,9 +4,7 @@ import Select from "react-select";
 import axios from 'axios'
 
 export default function FavoritesModal() {
-    const URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:5001"
-
-    const { token, setShowFavoritesModal, daySelected, } = useContext(GlobalContext);
+    const { setShowFavoritesModal, daySelected, } = useContext(GlobalContext);
 
     const [favorites,setFavorites] = useState([])
     const [title,setTitle] = useState('')
@@ -15,18 +13,17 @@ export default function FavoritesModal() {
     },[])
 
     async function getFavorites(){
-        const url = `${URL}/api/favorite`
+        const url = "/mealsy/api/favorite"
         const options = {
             headers:{
                 'Content-Type': 'text/plain;charset=utf-8',
-                'authorization': 'Bearer ' + token
-            }
+            },
+            withCredentials: true
         }
         const res = await axios.get(url,options)
         const favs = res.data.map((ele) =>{
             return {label:ele.name,value:ele.name,_id:ele._id}
         })
-        console.log(favs)
         setFavorites(favs)
     }
 
@@ -35,15 +32,14 @@ export default function FavoritesModal() {
     }
 
     async function saveInformation(){
-        let url = `${URL}/api/favorite/${title._id}`
+        let url = `/mealsy/api/favorite/${title._id}`
         const options = {
             headers:{
                 'Content-Type': 'application/json',
-                'authorization': 'Bearer ' + token
-            }
+            },
+            withCredentials: true
         }
         let res = await axios.get(url,options)
-        console.log(res.data)
         const name = title.label
         const ingredients = res.data.ingredients
         const date = new Date(daySelected)
@@ -53,7 +49,7 @@ export default function FavoritesModal() {
             date,
             color:'indigo'
         } 
-        url = `${URL}/api/info`
+        url = "/mealsy/api/info"
         res = await axios.post(url,body,options)
         setShowFavoritesModal(false)
     }

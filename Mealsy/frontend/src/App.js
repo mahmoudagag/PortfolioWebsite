@@ -18,7 +18,7 @@ const navigation = [
 ]
 
 function Navigation(props) {
-  const { token, setToken, setUser } = useContext(GlobalContext);
+  const { user, setUser } = useContext(GlobalContext);
   const [ menuHidden, setMenuHidden ] = useState(true);
   const [ menuDisplay, setMenuDisplay ] = useState('hidden sm:hidden');
 
@@ -34,9 +34,7 @@ function Navigation(props) {
   }
 
   function signOut(){
-    setToken(null)
     setUser(null)
-
   }
   return (
     <div className="px-6 pt-5 pb-2 lg:px-8">
@@ -64,10 +62,10 @@ function Navigation(props) {
             >
               Profile
             </NavLink>
-            {token === null && <NavLink to="/login" className="inline-block rounded-lg px-3 ml-2 py-1.5 text-sm font-semibold leading-6 text-gray-900 shadow-sm ring-1 ring-green-800/10 hover:ring-green-900/20 hover:bg-green-800 hover:text-slate-100">
+            {user === null && <NavLink to="/login" className="inline-block rounded-lg px-3 ml-2 py-1.5 text-sm font-semibold leading-6 text-gray-900 shadow-sm ring-1 ring-green-800/10 hover:ring-green-900/20 hover:bg-green-800 hover:text-slate-100">
               Log in
             </NavLink>}
-            {token && <NavLink onClick={signOut} to="/" className="inline-block rounded-lg px-3 ml-2 py-1.5 text-sm font-semibold leading-6 text-gray-900 shadow-sm ring-1 ring-green-800/10 hover:ring-green-900/20 hover:bg-green-800 hover:text-slate-100">
+            {user && <NavLink onClick={signOut} to="/" className="inline-block rounded-lg px-3 ml-2 py-1.5 text-sm font-semibold leading-6 text-gray-900 shadow-sm ring-1 ring-green-800/10 hover:ring-green-900/20 hover:bg-green-800 hover:text-slate-100">
               Log out
             </NavLink>}
           </div>
@@ -76,15 +74,16 @@ function Navigation(props) {
     </div>
   )
 }
+
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={process.env.REACT_APP_BACKEND_URL || "/"}>
       <Navigation />
       <div>
         <div>
           <Routes>
             <Route path="/" element={<HomePage />} />
-            <Route path="/mealsy" element={<HomePage />} />
+            {/* <Route path="/mealsy" element={<HomePage />} /> */}
             <Route path="/calendar" element={<Calendar />} />
             <Route path="/recipes" element={<RecipeCollection />} />
             <Route path="/sign-up" element={<SignUp />} />

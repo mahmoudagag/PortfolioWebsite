@@ -25,8 +25,6 @@ const GlobalContext = React.createContext({
     setShowFavoritesModal: () => {},
     user : null,
     setUser : () => {},
-    token : null,
-    setToken : () => {},
 });
 
 export default GlobalContext;
