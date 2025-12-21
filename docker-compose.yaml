@@ -15,10 +15,6 @@ services:
     build:
       context: ./WhatsTheWordApp        # Path to the Dockerfile for the backend
       dockerfile: Dockerfile    # Dockerfile name if not 'Dockerfile'
-      args:
-        REACT_APP_BASE_BACKEND_URL: "http://localhost/"
-        REACT_APP_WEBSOCKET_PATH: "/whatstheword/socket.io/"
-        BACKEND_URL: ${WHATSTHEWORD_PUBLIC_URL}
     ports:
       - "5002:5002"             # Expose backend's port 3000
     restart: always             # Restart policy
@@ -52,10 +48,7 @@ services:
   mealsy:
     build:
       context: ./Mealsy       
-      dockerfile: Dockerfile  
-      args:
-        APP_NAME: ${MEALSY_APP_NAME}
-        ENV: ${MEALSY_ENV}
+      dockerfile: Dockerfile
     command: sh -c "npx prisma migrate deploy && node app.js"
     ports:
       - "7002:7002"            

@@ -7,14 +7,12 @@ const server = require('http').createServer(app)
 
 const path = require('path')
 
-
-
 app.use(express.json())
 
 app.use(cors())
 const io = require("socket.io")(server,{
     cors:{
-        origin: "*"
+        origin: ["http://localhost:3000", "https://mahmoudagag.com"]
     }
 })
 
@@ -27,7 +25,7 @@ app.get('/',(req,res) =>{
     res.sendFile(path.join(__dirname,'build','index.html'))
 })
 
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 5001;
 
 const start = async() =>{
     server.listen(port, () => {
@@ -48,7 +46,7 @@ fs.createReadStream('letters.csv')
 const rooms = {}
 const players = {}
 io.on('connection', socket => {
-    console.log(socket.id)
+    // console.log(socket.id)
     socket.on('create-room', (user,room,cb) => {
         socket.join(room)
         if( !rooms[room] ){ rooms[room] = {} }

@@ -1,36 +1,33 @@
 # ---------- Stage 1: Build frontend ----------
 FROM node:20-alpine AS frontend-build
 WORKDIR /app
-COPY frontend/package*.json ./
-RUN npm ci
 
-# for api calls
-ARG APP_NAME
-ENV REACT_APP_BACKEND_URL=$APP_NAME
+COPY frontend/package*.json ./
+RUN npm ci --omit=dev
+
+# ARG APP_NAME
+ENV REACT_APP_BACKEND_URL="/mealsy"
+ENV PUBLIC_URL="/mealsy"
 
 COPY frontend .
-
-## for path for manifest
-ARG APP_NAME
-ENV PUBLIC_URL=$APP_NAME
-
 RUN npm run build
 
 # ---------- Stage 2: Backend ----------
 FROM node:20-alpine
 WORKDIR /app
 
-# Only production deps
+# Install prod deps only
 COPY backend/package*.json ./
 RUN npm ci --omit=dev
 
-# Copy backend source
-COPY backend .
-
-# Generate Prisma client
+# Prisma
+COPY backend/prisma ./prisma
 RUN npx prisma generate
 
-# Copy frontend build
+# Backend source
+COPY backend .
+
+# Frontend build only
 COPY --from=frontend-build /app/build ./build
 
 EXPOSE 7002

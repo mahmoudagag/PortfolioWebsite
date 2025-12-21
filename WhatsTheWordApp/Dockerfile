@@ -7,20 +7,12 @@ WORKDIR /app
 COPY frontend/package*.json ./
 
 # Install dependencies
-RUN npm ci --only=production
+RUN npm ci --omit=dev
 
-# Set build-time environment variables
-ARG REACT_APP_BASE_BACKEND_URL
-ARG REACT_APP_WEBSOCKET_PATH
-ENV REACT_APP_BASE_BACKEND_URL=$REACT_APP_BASE_BACKEND_URL
-ENV REACT_APP_WEBSOCKET_PATH=$REACT_APP_WEBSOCKET_PATH
-
-# Copy frontend source
 COPY frontend/ ./
 
 # Build the React app
-ARG BACKEND_URL
-ENV PUBLIC_URL=$BACKEND_URL
+ENV PUBLIC_URL="/whatstheword"
 RUN npm run build
 
 # ---------- Stage 2: Backend ----------
@@ -30,7 +22,7 @@ WORKDIR /app
 
 # Copy backend package files and install only production dependencies
 COPY backend/package*.json ./
-RUN npm ci --only=production
+RUN npm ci --omit=dev
 
 # Copy built frontend from previous stage
 COPY --from=frontend-build /app/build ./build

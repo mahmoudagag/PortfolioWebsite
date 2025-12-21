@@ -104,6 +104,7 @@ function Navigation(props) {
 function App() {
   return (
     <BrowserRouter basename={process.env.REACT_APP_BACKEND_URL || "/"}>
+    {/* // <BrowserRouter basename="/mealsy"> */}
       <Navigation />
       <div>
         <div>
