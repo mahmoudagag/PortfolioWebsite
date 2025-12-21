@@ -22,6 +22,7 @@ import authRouter from './routes/auth.js'
 import infoRouter from "./routes/information.js";
 import recipeRounter from './routes/recipe.js'
 import favoriteRouter from './routes/favorite.js'
+import protectedAuth from './routes/protectedAuth.js'
 // error handler
 import notFoundMiddleware from './middleware/not-found.js';
 import errorHandlerMiddleware from './middleware/error-handler.js';
@@ -35,7 +36,7 @@ app.use(rateLimiter({
 // app.use(helmet())
 // app.use(xss())
 app.use(cors({
-  origin: "http://localhost:3000",
+  origin: ["http://localhost:3000", "https://mahmoudagag.com"],
   credentials: true
 }))
 app.use(cookieParser())
@@ -49,10 +50,15 @@ app.get('/',(req,res) =>{
 })
 
 // routes
-app.use('/api/auth',authRouter)
+app.use('/api/auth', authRouter)
+app.use('/api/me', authenticateUser, protectedAuth)
 app.use('/api/api',authenticateUser,recipeRounter)
 app.use('/api/info',authenticateUser,infoRouter)
 app.use('/api/favorite',authenticateUser,favoriteRouter)
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
 
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);

@@ -18,7 +18,6 @@ export default function LogIn() {
         const body = {"email":email,"password":password}
         const res = await axios.post("/mealsy/api/auth/login",body)
         if (res){
-            
             setUser(res.data.user)
             navigate('/')
         }

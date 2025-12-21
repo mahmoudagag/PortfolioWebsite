@@ -5,7 +5,7 @@ import {
   } from '../errors/index.js'
 
 const auth = async (req,res,next) =>{
-    const token = req.cookies.token;
+    const token = req.cookies.mealsyToken;
     if (!token){
         throw new UnauthenticatedError('Authentication invalid');
     }

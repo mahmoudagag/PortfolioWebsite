@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import './App.css';
 import Calendar from "./components/Calendar";
 import SignUp from "./components/SignUp";
@@ -8,8 +8,10 @@ import { BrowserRouter, Routes, Route, NavLink } from "react-router-dom";
 import Profile from "./components/Profile";
 import RecipeCollection from "./components/RecipeCollection";
 import AboutUs from "./components/AboutUs";
+import NotFound from "./components/NotFound"
 import {useNavigate} from 'react-router-dom';
 import GlobalContext from "./context/GlobalContext";
+import axios from "axios";
 
 const navigation = [
   { name: 'Calendar', href: '/calendar' },
@@ -20,6 +22,7 @@ const navigation = [
 function Navigation(props) {
   const { user, setUser } = useContext(GlobalContext);
   const [ menuHidden, setMenuHidden ] = useState(true);
+  const [ authChecked, setAuthChecked ] = useState(false);
   const [ menuDisplay, setMenuDisplay ] = useState('hidden sm:hidden');
 
   const navigate = useNavigate();
@@ -33,8 +36,31 @@ function Navigation(props) {
     }
   }
 
-  function signOut(){
+  useEffect(() => {
+    const checkSession = async () => {
+      try {
+        const res = await axios.get('/mealsy/api/me/session', {
+          withCredentials: true,
+        });
+        setUser(res.data.user);
+      } catch (err) {
+        setUser(null);
+        navigate("/")
+      } finally {
+        setAuthChecked(true);
+      }
+    };
+    if(!user){
+      checkSession();
+    }
+  },[])
+
+  async function signOut(){
+    await axios.get('/mealsy/api/me/logout', {
+      withCredentials: true,
+    });
     setUser(null)
+    navigate("/")
   }
   return (
     <div className="px-6 pt-5 pb-2 lg:px-8">
@@ -90,6 +116,8 @@ function App() {
             <Route path="/aboutus" element={<AboutUs />} />
             <Route path="/login" element={<LogIn />} />
             <Route path="/profile" element={<Profile />} />
+            {/* Catch-all 404 */}
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </div>
       </div>

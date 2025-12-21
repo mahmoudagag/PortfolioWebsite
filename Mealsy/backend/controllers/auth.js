@@ -31,7 +31,7 @@ const register = async (req,res) => {
         },
     });
     const token = createJWT(user)
-    res.cookie("token", token, cookieOptions)
+    res.cookie("mealsyToken", token, cookieOptions)
     res.status(StatusCodes.CREATED).json({user:{firstname:user.firstname,lastname:user.lastname,email:user.email}})
     
 }
@@ -55,7 +55,16 @@ const login = async (req,res) => {
         throw new UnauthenticatedError('Invalid Credentioanls')
     }
     const token = createJWT(user)
-    res.cookie("token", token, cookieOptions)
+    res.cookie("mealsyToken", token, cookieOptions)
     res.status(StatusCodes.OK).json({user:{firstname:user.firstname,lastname:user.lastname,email:user.email}})
 }
-export {register , login}
+
+const logout = async (req, res) => {
+    res.clearCookie("mealsyToken");
+    res.sendStatus(StatusCodes.OK)
+}
+
+const loginWithCookie = async (req, res) => {
+    res.status(StatusCodes.OK).json({user:req.user})
+}
+export {register , login, loginWithCookie, logout}

@@ -13,9 +13,6 @@ COPY frontend .
 ## for path for manifest
 ARG APP_NAME
 ENV PUBLIC_URL=$APP_NAME
-## To know the environment
-# ARG ENV
-# ENV ENV=$ENV
 
 RUN npm run build
 
