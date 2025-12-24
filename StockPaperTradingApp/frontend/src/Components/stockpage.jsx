@@ -4,9 +4,7 @@ import GlobalContext from '../ContextWrapper';
 import Loading from './loading';
 
 export default function StockInformationPage({displayModal}){
-
-  const URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:8001"
-  const {token, sides, stockSymbol} = useContext(GlobalContext)
+  const { sides, stockSymbol} = useContext(GlobalContext)
   const wasCalled = useRef(false);
   const [stockInformation, setStockInformation] = useState(null)
   const [displayedChartData, setDisplayChartData] = useState({})
@@ -19,12 +17,12 @@ export default function StockInformationPage({displayModal}){
   },[])
 
   async function getStockData(){
-    let url = `${URL}/finance/stockPage?stock=${stockSymbol}`;
+    let url = `/stockpapertrading/finance/stockPage?stock=${stockSymbol}`;
     const response = await fetch(url, {
       method: "GET",
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
-        token: token,
       },
     });
     const result = await response.json();
@@ -52,7 +50,7 @@ export default function StockInformationPage({displayModal}){
           return month + '/' + day + '/' + year
         }
       })
-      var value = result.chartIntervals[ts].chart.result[0].indicators.quote[0].close.map( v => v.toFixed(2))
+      var value = result.chartIntervals[ts].chart.result[0].indicators.quote[0].close.map( v => Number(v || 0).toFixed(2))
       return value.map( (v, i) => {
         return {
           date : time[i],

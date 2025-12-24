@@ -14,7 +14,6 @@ export default function Home() {
   const [lineChartData, setLineChartData] = useState(null);
   const [sectorCategories, setSectorCategories] = useState(null);
 
-
   const { dashboardData, user } = useContext(GlobalContext);
 
   useEffect(() => {

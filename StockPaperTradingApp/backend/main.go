@@ -6,7 +6,6 @@ import (
 	"StockPaperTradingApp/routes"
 	"os"
 
-	"github.com/gin-gonic/contrib/static"
 	"github.com/gin-gonic/gin"
 	//  https://pkg.go.dev/github.com/robfig/cron#hdr-Usage
 )
@@ -27,6 +26,7 @@ func main() {
 		auth.POST("/register", routes.RegisterEndpoint)
 		auth.POST("/login", routes.LoginEnpdpoint)
 		auth.GET("/loginAuthToken", middlewares.Authentication, routes.LoginWithTokenEnpdpoint)
+		auth.GET("/logout", middlewares.Authentication, routes.LogoutEndpoint)
 	}
 
 	holdings := server.Group("/holdings").Use(middlewares.Authentication)
@@ -61,7 +61,15 @@ func main() {
 		api.GET("/getAllData", routes.GetAllDataEndpoint)
 	}
 
-	server.Use(static.Serve("/", static.LocalFile("./build", true)))
+	// server.Use(static.Serve("/", static.LocalFile("./build", true)))
+
+	server.Static("/static", "./build/static")
+	server.StaticFile("/favicon.ico", "./build/favicon.ico")
+
+	server.NoRoute(func(c *gin.Context) {
+		c.File("./build/index.html")
+	})
+
 	port := os.Getenv("PORT")
 	if port == "" {
 		println("listening to port: 8001")

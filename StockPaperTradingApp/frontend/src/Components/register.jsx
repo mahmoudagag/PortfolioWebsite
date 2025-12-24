@@ -9,32 +9,25 @@ import { FaLock } from "react-icons/fa";
 
 export const Register = () => {
 
-  const URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:8001"
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const { setToken, setUser } = useContext(GlobalContext);
+  const { setUser } = useContext(GlobalContext);
 
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [redirectBool, setRedirectBool] = useState(false);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    let storedToken = localStorage.getItem("Token");
-    if (storedToken) {
-      navigate("/");
-    }
-  });
-
   //send new user to database
   const submit = async (e) => {
     e.preventDefault();
 
-    let url = `${URL}/auth/register`;
+    let url = "/stockpapertrading/auth/register";
     const response = await fetch(url, {
       method: "POST",
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
       },
@@ -47,10 +40,6 @@ export const Register = () => {
     if (response.ok) {
       var result = await response.json();
       setUser(result.user);
-      setToken(result.token);
-      if (document.getElementById("rememberMe").checked) {
-        localStorage.setItem("Token", result.token);
-      }
       navigate("/");
     } else if (response.status === 409) {
       setEmailError("Email already exists");

@@ -3,7 +3,6 @@ import { useState, createContext } from "react"
 const GlobalContext = createContext()
 
 export function ContextWrapper(props){
-    const [token, setToken] = useState(null)
     const [user, setUser] = useState(null)
     const [holding, setHolding] = useState(null)
     const [activity, setActivity] = useState(null)
@@ -26,8 +25,6 @@ export function ContextWrapper(props){
 
     return (
         <GlobalContext.Provider value ={{
-            token, 
-            setToken,
             user,
             setUser,
             holding,

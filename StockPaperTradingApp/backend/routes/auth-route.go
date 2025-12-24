@@ -28,3 +28,7 @@ func LoginEnpdpoint(ctx *gin.Context) {
 func LoginWithTokenEnpdpoint(ctx *gin.Context) {
 	ctx.JSON(userController.LoginWithAuth(ctx))
 }
+
+func LogoutEndpoint(ctx *gin.Context) {
+	ctx.JSON(userController.Logout(ctx))
+}

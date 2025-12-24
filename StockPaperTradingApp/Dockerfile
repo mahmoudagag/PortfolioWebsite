@@ -15,10 +15,8 @@ RUN npm install --production
 COPY frontend/ ./
 
 # Build React app for production
-ARG REACT_APP_BACKEND_URL
-ENV REACT_APP_BACKEND_URL=$REACT_APP_BACKEND_URL
-ARG BACKEND_URL
-ENV PUBLIC_URL=$BACKEND_URL
+ENV REACT_APP_BACKEND_URL="/stockpapertrading"
+ENV PUBLIC_URL="/stockpapertrading"
 RUN npm run build
 
 ##########################

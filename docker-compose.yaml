@@ -27,9 +27,6 @@ services:
     build:
       context: ./StockPaperTradingApp      
       dockerfile: Dockerfile   
-      args:
-        REACT_APP_BACKEND_URL: "http://localhost/stockpapertrading"
-        BACKEND_URL: ${STOCKPAPERTRADING_PUBLIC_URL}
     ports:
       - "8002:8002"             
     restart: always            

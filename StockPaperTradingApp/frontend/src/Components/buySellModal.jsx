@@ -4,9 +4,6 @@ import GlobalContext from "../ContextWrapper";
 import { Slider } from "@mui/material";
 
 export default function BuySellModal({shouldOpen, setShouldOpen, side, setSide, getAllData}){
-
-    const URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:8001"
-
     const {token, user, holding, sides, stockSymbol} = useContext(GlobalContext)
     const [stockInformation, setStockInformation] = useState(null)
     const [buyRange,setBuyRange] = useState(0)
@@ -35,13 +32,13 @@ export default function BuySellModal({shouldOpen, setShouldOpen, side, setSide, 
     },[side])
 
     async function GetModalInformation(){
-        let url = `${URL}/finance/stock?stocks=${stockSymbol}`;
+        let url = `/stockpapertrading/finance/stock?stocks=${stockSymbol}`;
         const response = await fetch(url, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            token: token,
-          },
+            method: "GET",
+            credentials: "include",
+            headers: {
+                "Content-Type": "application/json",
+            },
         });
         if (response.ok) {
             const result = await response.json();
@@ -72,12 +69,12 @@ export default function BuySellModal({shouldOpen, setShouldOpen, side, setSide, 
             setShouldOpen(false)
             return
         }
-        const url = `${URL}/api/` + (side === sides.buy ? "buyStock" : "sellStock")
+        const url = "/stockpapertrading/api/" + (side === sides.buy ? "buyStock" : "sellStock")
         const response = await fetch(url, {
             method: "POST",
+            credentials: "include",
             headers: {
               "Content-Type": "application/json",
-              token: token,
             },
             body: JSON.stringify({
                 "quantity": value,

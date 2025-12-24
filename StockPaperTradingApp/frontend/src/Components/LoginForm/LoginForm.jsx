@@ -8,7 +8,6 @@ import { FaUser } from "react-icons/fa";
 import { FaLock } from "react-icons/fa";
 
 export const LoginForm = (props) => {
-  const URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:8001"
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -16,14 +15,7 @@ export const LoginForm = (props) => {
   const [passwordError, setPasswordError] = useState("");
 
   const navigate = useNavigate();
-  const { user, setUser, token, setToken } = useContext(GlobalContext);
-
-  useEffect(() => {
-    let storedToken = localStorage.getItem("Token");
-    if (storedToken || token || user) {
-      navigate("/");
-    }
-  });
+  const { setUser } = useContext(GlobalContext);
 
   //Validation logic for Login Form:
   const validateForm = () => {
@@ -58,9 +50,10 @@ export const LoginForm = (props) => {
     e.preventDefault();
 
     //send request to login route
-    let url = `${URL}/auth/login`;
+    let url = "/stockpapertrading/auth/login";
     const response = await fetch(url, {
       method: "POST",
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
       },
@@ -72,10 +65,6 @@ export const LoginForm = (props) => {
     if (response.ok) {
       var result = await response.json();
       setUser(result.user);
-      setToken(result.token);
-      if (document.getElementById("rememberMe").checked) {
-        localStorage.setItem("Token", result.token);
-      }
       navigate("/");
     } else if (response.status === 401) {
       setEmailError("Incorrect Credentials");

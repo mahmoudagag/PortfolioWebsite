@@ -14,8 +14,7 @@ import GlobalContext from "../../ContextWrapper";
 import { useNavigate } from "react-router-dom";
 
 export default function Header() {
-  const URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:8001"
-  const { user, token, pages, setPage, setStockSymbol } = useContext(GlobalContext);
+  const { user, setUser, pages, setPage, setStockSymbol } = useContext(GlobalContext);
 
   const [autoComplete, setAutoComplete] = useState([]);
   const wasCalled = useRef(false);
@@ -59,12 +58,12 @@ export default function Header() {
       // wait a second, if the search bar didn't change then send the request
       const search = document.getElementById("searchBar").value;
       if (value === search) {
-        let url = `${URL}/finance/autocomplete?query=${value}`;
+        let url = `/stockpapertrading/finance/autocomplete?query=${value}`;
         const response = await fetch(url, {
           method: "GET",
+          credentials: "include",
           headers: {
             "Content-Type": "application/json",
-            token: token,
           },
         });
         if (response.ok) {
@@ -75,9 +74,19 @@ export default function Header() {
     }, 500);
   }
   
-  function handleSignout(){
-    localStorage.removeItem("Token");
-    navigate("/login");
+  async function handleSignout(){
+    let url = "/stockpapertrading/auth/logout";
+    const response = await fetch(url, {
+      method: "GET",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      }
+    });
+    if (response.ok) {
+      setUser(null);
+      navigate("/login");
+    }
   }
 
   return (
