@@ -1,9 +1,6 @@
 services:
   portfoliowebsite:
-    image: portfoliowebsite:latest
-    build:
-      context: ./PortfolioWebsite
-      dockerfile: Dockerfile
+    image: 952027539394.dkr.ecr.us-east-1.amazonaws.com/portfoliowebsite
     ports:
       - "3002:3002" 
     restart: always
@@ -13,10 +10,7 @@ services:
       - backend
 
   whatstheword:
-    image: whatstheword:latest
-    build:
-      context: ./WhatsTheWordApp
-      dockerfile: Dockerfile
+    image: 952027539394.dkr.ecr.us-east-1.amazonaws.com/whatstheword
     ports:
       - "5002:5002"
     restart: always
@@ -26,10 +20,7 @@ services:
       - backend
 
   stockpapertrading:
-    image: stockpapertrading:latest
-    build:
-      context: ./StockPaperTradingApp      
-      dockerfile: Dockerfile   
+    image: 952027539394.dkr.ecr.us-east-1.amazonaws.com/stockpapertrading 
     ports:
       - "8002:8002"             
     restart: always            
@@ -46,10 +37,7 @@ services:
       - backend
 
   mealsy:
-    image: mealsy:latest
-    build:
-      context: ./Mealsy       
-      dockerfile: Dockerfile
+    image: 952027539394.dkr.ecr.us-east-1.amazonaws.com/mealsy
     command: sh -c "npx prisma migrate deploy && node app.js"
     ports:
       - "7002:7002"            
@@ -87,10 +75,7 @@ services:
       retries: 5
 
   nginx:
-    image: nginx-portfolio:latest
-    build:
-      context: ./Nginx
-      dockerfile: Dockerfile
+    image: 952027539394.dkr.ecr.us-east-1.amazonaws.com/nginx-portfolio
     ports:
       - "80:80"
     depends_on:
@@ -107,6 +92,3 @@ volumes:
 networks:
   backend:
     driver: bridge
-### ASL/ 
-
-# to build: docker compose up --build
