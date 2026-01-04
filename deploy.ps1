@@ -27,6 +27,8 @@ foreach ($service in $services) {
 
 Write-Host "`nAll images pushed! Go to EC2 and run: docker compose pull && docker compose up -d" -ForegroundColor Green
 
+### RUN using .\deploy.ps1 in PowerShell
+
 ### In the EC2
 # docker compose pull
 # docker compose up -d
