@@ -1,74 +1,48 @@
-worker_processes  1;
+worker_processes 1;
 
 events {
-    worker_connections  1024;
+    worker_connections 1024;
 }
 
 http {
     include       mime.types;
     default_type  application/octet-stream;
-
-    sendfile        on;
-
-    log_format main '$remote_addr - $remote_user [$time_local] "$request" '
-                      '$status $body_bytes_sent "$http_referer" '
-                      '"$http_user_agent" "$http_x_forwarded_for"';
+    sendfile on;
 
     map $http_upgrade $connection_upgrade {
         default upgrade;
         ''      close;
     }
 
+    map "${ENABLE_HTTPS}" $enable_redirect {
+        "false"  0;
+        default 1;
+    }
+    ##
+    ## HTTP (always on)
+    ##
     server {
-        listen         80;
-
+        listen 80;
         server_name _;
 
-        # Redirect ONLY if Cloudflare says original request was HTTP
-        if ($http_x_forwarded_proto = "http") {
+        # Redirect only when explicitly enabled
+        if ($enable_redirect) {
             return 301 https://$host$request_uri;
         }
 
-        location /whatstheword/ {
-            proxy_pass http://whatstheword:5002/;
-            proxy_redirect off;
-            proxy_http_version 1.1;
-            proxy_set_header Upgrade $http_upgrade;
-            proxy_set_header Host $host;
-            proxy_set_header Connection "Upgrade";
-        }
+        include /etc/nginx/includes/proxy.conf;
+    }
 
-        location /stockpapertrading/ {
-            proxy_pass http://stockpapertrading:8002/;
-            proxy_http_version 1.1;
-            proxy_set_header Upgrade $http_upgrade;
-            proxy_set_header Connection 'upgrade';
-            proxy_set_header Host $host;
-            proxy_set_header X-Real-IP $remote_addr;
-            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-            proxy_set_header X-Forwarded-Proto $scheme;
-       }
+    ##
+    ## HTTPS (Cloudflare → EC2)
+    ##
+    server {
+        listen 443 ssl;
+        server_name _;
 
-        location /mealsy/ {
-            proxy_pass http://mealsy:7002/;
-            proxy_http_version 1.1;
-            proxy_set_header Upgrade $http_upgrade;
-            proxy_set_header Connection 'upgrade';
-            proxy_set_header Host $host;
-            proxy_set_header X-Real-IP $remote_addr;
-            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-            proxy_set_header X-Forwarded-Proto $scheme;
-        }
+        ssl_certificate     /etc/nginx/ssl/cert.pem;
+        ssl_certificate_key /etc/nginx/ssl/key.pem;
 
-        location / {
-            proxy_pass http://portfoliowebsite:3002/;
-            proxy_http_version 1.1;
-            proxy_set_header Upgrade $http_upgrade;
-            proxy_set_header Connection 'upgrade';
-            proxy_set_header Host $host;
-            proxy_set_header X-Real-IP $remote_addr;
-            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-            proxy_set_header X-Forwarded-Proto $scheme;
-        }
+        include /etc/nginx/includes/proxy.conf;
     }
 }

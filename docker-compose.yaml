@@ -93,6 +93,8 @@ services:
       dockerfile: Dockerfile
     ports:
       - "80:80"
+    environment:
+      ENABLE_HTTPS: ${NGINX_ENABLE_HTTPS}
     depends_on:
       - whatstheword
       - portfoliowebsite

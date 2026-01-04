@@ -78,6 +78,9 @@ services:
     image: 952027539394.dkr.ecr.us-east-1.amazonaws.com/nginx-portfolio
     ports:
       - "80:80"
+      - "443:443"
+    environment:
+      ENABLE_HTTPS: ${NGINX_ENABLE_HTTPS}
     depends_on:
       - whatstheword
       - portfoliowebsite
