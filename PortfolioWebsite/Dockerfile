@@ -44,6 +44,8 @@ RUN apt-get update && apt-get install -y ca-certificates && rm -rf /var/lib/apt/
 # Copy built Go binary + frontend from builder
 COPY --from=backend-build /build/PortfolioWebsite ./
 COPY --from=backend-build /build/frontend ./frontend
+COPY --from=backend-build /build/Visual-Sorting-Algorithms ./Visual-Sorting-Algorithms
+COPY --from=backend-build /build/Visualize-Search-Algorithms ./Visualize-Search-Algorithms
 
 # Expose port
 EXPOSE 3002
