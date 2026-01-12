@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - "portfoliowebsite/**"
+      - "PortfolioWebsite/**"
       - ".github/workflows/ecr-build.yml"
 
 jobs:
@@ -28,7 +28,7 @@ jobs:
       
       - name: Build and Push Image
         run: |
-          docker build -t portfoliowebsite ./portfoliowebsite
+          docker build -t portfoliowebsite ./PortfolioWebsite
           docker tag portfoliowebsite:latest \
             ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/portfoliowebsite:latest
           docker push \
