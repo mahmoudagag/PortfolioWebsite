@@ -1,2 +1,9 @@
 .env
 AwsKey/
+
+*.tfstate
+*.tfstate.backup
+.terraform/
+
+ssl/
+node_modules/
