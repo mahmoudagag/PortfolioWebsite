@@ -7,10 +7,12 @@ import (
 	"os"
 
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 	//  https://pkg.go.dev/github.com/robfig/cron#hdr-Usage
 )
 
 func main() {
+	godotenv.Load()
 	server := gin.Default()
 	db.ConnectToDB()
 	db.MigrateTables()

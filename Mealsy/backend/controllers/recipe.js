@@ -8,7 +8,7 @@ export const getRecipe = async (req, res) => {
   request.get(
     {
       url: `https://api.api-ninjas.com/v1/recipe?query=${query}`,
-      headers: { "X-Api-Key": process.env.API_KEY || "j1SvC0/dlV9huEqfruyNRA==iWtoDdyERSYTsHXN"},
+      headers: { "X-Api-Key": process.env.API_KEY },
     },
     (error, response, body) => {
       if (error || response.statusCode !== 200) {

@@ -20,9 +20,6 @@ func Authentication(ctx *gin.Context) {
 	}
 
 	secret := os.Getenv("JWT_ENCRYPTION_KEY")
-	if secret == "" {
-		secret = "FkdcFb5Dsa"
-	}
 
 	token, err := jwt.ParseWithClaims(tokenString, jwt.MapClaims{}, func(token *jwt.Token) (interface{}, error) {
 		return []byte(secret), nil

@@ -35,9 +35,6 @@ func (u *User) ComparePasswords(candidatePassword string) bool {
 // CreateJWT generates a JWT token for the user
 func (u *User) CreateJWT() (string, error) {
 	encryptionKey := os.Getenv("JWT_ENCRYPTION_KEY")
-	if encryptionKey == "" {
-		encryptionKey = "FkdcFb5Dsa"
-	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"user_id": u.ID,

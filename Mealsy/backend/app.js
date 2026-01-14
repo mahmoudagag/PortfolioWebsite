@@ -63,7 +63,8 @@ app.get('*', (req, res) => {
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
 
-const port = process.env.PORT || 7001;
+const port = process.env.PORT;
+
 const start = async () => {
   try {
     app.listen(port, () =>

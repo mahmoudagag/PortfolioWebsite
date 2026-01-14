@@ -10,7 +10,7 @@ const auth = async (req,res,next) =>{
         throw new UnauthenticatedError('Authentication invalid');
     }
     try{
-        const payload = jwt.verify(token, process.env.JWT_SECRET || "BC5kVNZjOF")
+        const payload = jwt.verify(token, process.env.JWT_SECRET)
         const user = await prisma.user.findUnique({
         where: { id: payload.userId },
         select: {

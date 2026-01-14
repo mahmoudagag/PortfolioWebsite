@@ -29,9 +29,6 @@ func Helper() HelperController {
 
 func (c *helperController) SendRequest(rawUrl string) map[string]any {
 	apiToken := os.Getenv("API_KEY")
-	if apiToken == "" {
-		apiToken = "tZa6ihrqO217vvPdFvs0q5jc4FCFZseS52YGNnfL"
-	}
 	req, _ := http.NewRequest(http.MethodGet, rawUrl, nil)
 	req.Header.Set("x-api-key", apiToken)
 	req.Header.Set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")

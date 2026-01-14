@@ -14,7 +14,7 @@ export async function comparePassword(plainPassword, hashedPassword) {
 export function createJWT(user) {
   return jwt.sign(
     { userId: user.id, email: user.email },
-    process.env.JWT_SECRET || "BC5kVNZjOF",
+    process.env.JWT_SECRET,
     { expiresIn: process.env.JWT_LIFETIME || "1d" } // e.g., '7d'
   );
 }
