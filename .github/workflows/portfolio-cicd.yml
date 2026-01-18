@@ -15,6 +15,9 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
+        
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -29,7 +32,7 @@ jobs:
       - name: Build and Push Image
         run: |
           docker buildx build --platform linux/arm64 -t ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/portfoliowebsite:latest ./PortfolioWebsite --push
-          
+
       - name: Deploy to EC2
         uses: appleboy/ssh-action@v0.1.7
         with:
