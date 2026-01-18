@@ -6,7 +6,7 @@ on:
       - main
     paths:
       - "PortfolioWebsite/**"
-      - ".github/workflows/ecr-build.yml"
+      - ".github/workflows/portfolio-cicd.yml"
 
 jobs:
   build-portfoliowebsite:
@@ -33,3 +33,14 @@ jobs:
             ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/portfoliowebsite:latest
           docker push \
             ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/portfoliowebsite:latest
+      
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@v0.1.7
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            cd ~/app
+            docker compose pull portfoliowebsite
+            docker compose up -d portfoliowebsite
