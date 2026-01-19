@@ -36,8 +36,8 @@ jobs:
           docker buildx build --pull \
             --platform linux/arm64 \
             -t $ECR_REPO:latest \
-            --cache-from=type=registry,ref=$ECR_REPO:latest \
-            --cache-to=type=registry,ref=$ECR_REPO:latest,mode=max \
+            --cache-from=type=gha \
+            --cache-to=type=gha,mode=max \
             ./PortfolioWebsite --push
 
       - name: Deploy to EC2
